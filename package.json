@@ -11,7 +11,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "NODE_ENV=production node dist/main",
+    "start:prod": "node dist/main",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -20,12 +20,16 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "webpack": "NODE_ENV=development nest build --watch --webpack",
     "start:hmr": "node dist/main",
-    "heroku-postbuild": "npm i --only=dev --no-shrinkwrap && npm run build"
+    "heroku-postbuild": "npm i --only=dev --no-shrinkwrap && npm run build",
+    "doc": "npx compodoc --port 11045 -p tsconfig.json -s",
+    "doc:serve": "npm run doc && npx compodoc -s"
   },
   "dependencies": {
     "@nestjs/common": "^6.7.2",
     "@nestjs/core": "^6.7.2",
     "@nestjs/platform-express": "^6.7.2",
+    "@nestjs/serve-static": "^1.0.1",
+    "@nestjs/swagger": "^3.1.0",
     "@nestjs/typeorm": "^6.2.0",
     "@types/mongodb": "^3.3.8",
     "cache-manager": "^2.10.0",
@@ -36,11 +40,13 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",
+    "swagger-ui-express": "^4.1.2",
     "typeorm": "^0.2.20",
     "uuid": "^3.3.3",
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.11",
     "@nestjs/cli": "^6.9.0",
     "@nestjs/schematics": "^6.7.0",
     "@nestjs/testing": "^6.7.1",

@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 import chalk from 'chalk';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { AppModule } from './app.module';
 
 import {
   ValidationPipe,
@@ -22,7 +23,7 @@ async function bootstrap() {
       cors: true,
     });
 
-    // adapter for e2e testing
+    // // adapter for e2e testing
     const httpAdapter = app.getHttpAdapter();
 
     // loggerMiddleware
@@ -37,6 +38,16 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe());
 
     app.enableShutdownHooks();
+
+    const options = new DocumentBuilder()
+      .setTitle('Nestjs Restful Best Practice')
+      .setDescription('built Nestjs, TypeORM, Mongodb')
+      .setVersion('1.0')
+      .addTag('chnirt')
+      .build();
+
+    const document = SwaggerModule.createDocument(app, options);
+    SwaggerModule.setup('api', app, document);
 
     await app.listen(PORT);
 
