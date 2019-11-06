@@ -19,6 +19,7 @@ async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule, {
       logger: new MyLogger(),
+      cors: true,
     });
 
     // adapter for e2e testing
