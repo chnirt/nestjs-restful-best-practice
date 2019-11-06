@@ -20,7 +20,6 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "webpack": "NODE_ENV=development nest build --watch --webpack",
     "start:hmr": "node dist/main",
-    "prestart:prod": "rimraf dist && npm run build",
     "heroku-postbuild": "npm i --only=dev --no-shrinkwrap && npm run build"
   },
   "dependencies": {
