@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import chalk from 'chalk';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 import { AppModule } from './app.module';
 
 import {
@@ -12,7 +13,7 @@ import {
 } from './common';
 import { MyLogger } from './config';
 
-import { NODE_ENV, DOMAIN, PORT, RATE_LIMIT_MAX, STATIC } from './environments';
+import { NODE_ENV, DOMAIN, PORT } from './environments';
 
 declare const module: any;
 
@@ -41,13 +42,20 @@ async function bootstrap() {
 
     const options = new DocumentBuilder()
       .setTitle('Nestjs Restful Best Practice')
-      .setDescription('built Nestjs, TypeORM, Mongodb')
+      .setDescription('built NestJS, TypeORM, MongoDB')
       .setVersion('1.0')
       .addTag('chnirt')
+      .addTag('nestjs', 'framework')
+      .setContactEmail('trinhchinchin@mail.com')
+      .setExternalDoc('For more information', 'http://swagger.io')
+      .addBearerAuth('Authorization', 'header')
+      .setBasePath('/')
       .build();
 
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('api', app, document);
+
+    // app.setGlobalPrefix('api');
 
     await app.listen(PORT);
 
