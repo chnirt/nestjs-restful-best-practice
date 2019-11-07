@@ -9,6 +9,8 @@ import { AppService } from './app.service';
 import { CacheService, TypeormService } from './config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { EventsModule } from './modules/events/events.module';
+import { EventsGateway } from './modules/events/events.gateway';
 
 @Module({
   imports: [
@@ -23,8 +25,9 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule,
     AuthModule,
+    EventsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, EventsGateway],
 })
 export class AppModule {}

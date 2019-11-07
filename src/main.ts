@@ -2,7 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import chalk from 'chalk';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
+import * as helmet from 'helmet';
+import * as rateLimit from 'express-rate-limit';
 import { AppModule } from './app.module';
 
 import {
@@ -24,6 +25,14 @@ async function bootstrap() {
       cors: true,
     });
 
+    app.use(helmet());
+    app.use(
+      rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 10000, // limit each IP to 10000 requests per windowMs
+      }),
+    );
+
     // // adapter for e2e testing
     const httpAdapter = app.getHttpAdapter();
 
@@ -44,8 +53,7 @@ async function bootstrap() {
       .setTitle('Nestjs Restful Best Practice')
       .setDescription('built NestJS, TypeORM, MongoDB')
       .setVersion('1.0')
-      .addTag('chnirt')
-      .addTag('nestjs', 'framework')
+      .addTag('chnirt', 'developer')
       .setContactEmail('trinhchinchin@mail.com')
       .setExternalDoc('For more information', 'http://swagger.io')
       .addBearerAuth('Authorization', 'header')

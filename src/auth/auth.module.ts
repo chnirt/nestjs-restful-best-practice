@@ -13,7 +13,7 @@ import { ACCESS_TOKEN_SECRET } from '../environments';
     PassportModule.register({ defaultStrategy: 'jwt', session: true }),
     JwtModule.register({
       secret: ACCESS_TOKEN_SECRET!,
-      signOptions: { expiresIn: '30s' },
+      signOptions: { expiresIn: '30d' },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
