@@ -66,7 +66,11 @@ export class AppController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
-  @ApiImplicitFile({ name: 'file', required: true })
+  @ApiImplicitFile({
+    name: 'file',
+    required: true,
+    description: 'one file.',
+  })
   async uploadFile(@UploadedFile() file) {
     // console.log(file);
 
@@ -108,7 +112,11 @@ export class AppController {
   @Post('uploads')
   @UseInterceptors(FileInterceptor('files'))
   @ApiConsumes('multipart/form-data')
-  @ApiImplicitFile({ name: 'files', required: true })
+  @ApiImplicitFile({
+    name: 'files',
+    required: true,
+    description: 'List of files.',
+  })
   uploadFiles(@UploadedFile() files) {
     console.log(files);
     return ['path', 'path1'];

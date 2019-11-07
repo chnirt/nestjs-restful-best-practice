@@ -9,7 +9,17 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
+    "incremental": true,
+    "paths": {
+      "@auth": ["src/auth"],
+      "@common": ["src/common"],
+      "@config": ["src/config"],
+      "@environments": ["src/environments"],
+      "@models": ["src/models"],
+      "@shared": ["src/shared"],
+      "@utils": ["src/utils"],
+      "@validations": ["src/validations"]
+    }
   },
   "exclude": ["node_modules", "dist"]
 }

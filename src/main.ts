@@ -47,6 +47,7 @@ async function bootstrap() {
     // global nest setup
     app.useGlobalPipes(new ValidationPipe());
 
+    // Starts listening to shutdown hooks
     app.enableShutdownHooks();
 
     const options = new DocumentBuilder()
