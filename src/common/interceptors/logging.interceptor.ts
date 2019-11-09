@@ -20,7 +20,7 @@ export class LoggingInterceptor implements NestInterceptor {
       .bold(`${context.getArgs()[0].route.stack[0].method}`);
     return next.handle().pipe(
       tap(() => {
-        Logger.debug(`⛩  ${parentType} » ${fieldName}`, 'GraphQL');
+        Logger.debug(`⛩  ${parentType} » ${fieldName}`, 'Restful');
         // console.log(context.getArgs()[0]['route']);
       }),
     );

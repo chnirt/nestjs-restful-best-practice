@@ -13,7 +13,6 @@ import { AuthModule } from './auth/auth.module';
 import { TerminusOptionsService } from './terminus-options.service';
 import { EventsModule } from './modules/events/events.module';
 import { EventsGateway } from './modules/events/events.gateway';
-import { HeroesModule } from './modules/heroes/heroes.module';
 
 @Module({
   imports: [
@@ -32,7 +31,6 @@ import { HeroesModule } from './modules/heroes/heroes.module';
     UsersModule,
     AuthModule,
     EventsModule,
-    HeroesModule,
   ],
   controllers: [AppController],
   providers: [AppService, EventsGateway],

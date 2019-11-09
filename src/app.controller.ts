@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   CacheInterceptor,
+  Body,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -17,21 +18,27 @@ import {
   ApiImplicitFile,
   ApiImplicitBody,
   ApiOkResponse,
+  ApiUseTags,
+  ApiOperation,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as cloudinary from 'cloudinary';
 import { createReadStream } from 'fs';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
-import { LoginUserDto } from './modules/users/loginUser.dto';
+import { LoginUserDto } from './modules/users/dto/login-user.dto';
 import { STATIC, CLOUD_NAME, API_KEY, API_SECRET } from './environments';
+import { CreateUserDto } from './modules/users/dto/create-user.dto';
+import { UsersService } from './modules/users/users.service';
 
+@ApiUseTags('basic')
 @Controller()
 @UseInterceptors(CacheInterceptor)
 export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly authService: AuthService,
+    private readonly userService: UsersService,
   ) {}
 
   @Get()
@@ -39,18 +46,21 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get(`${STATIC!}/:fileId`)
-  getUpload(@Param('fileId') fileId, @Res() res): any {
-    return res.sendFile(fileId, {
-      root: `${STATIC!}`,
-    });
+  @ApiOperation({
+    title: 'Create one User',
+  })
+  @Post('register')
+  async register(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
   }
 
   @UseGuards(AuthGuard('local'))
-  @Post('auth/login')
-  @ApiImplicitBody({ name: 'user', type: LoginUserDto })
-  @ApiOkResponse({ description: 'result Token' })
-  async login(@Request() req) {
+  // @ApiOperation({
+  //   title: 'Login with email, password',
+  // })
+  @Post('login')
+  @ApiImplicitBody({ name: 'input', type: LoginUserDto })
+  login(@Request() req) {
     return this.authService.login(req.user);
   }
 
@@ -87,9 +97,9 @@ export class AppController {
         .pipe(
           cloudinary.v2.uploader.upload_stream(
             {
-              folder: 'chnirt',
+              folder: 'restful',
               public_id: uniqueFilename,
-              tags: `chnirt`,
+              tags: `restful`,
             }, // directory and tags are optional
             (err, image) => {
               if (err) {
@@ -120,5 +130,12 @@ export class AppController {
   uploadFiles(@UploadedFile() files) {
     console.log(files);
     return ['path', 'path1'];
+  }
+
+  @Get(`${STATIC!}/:fileId`)
+  getUpload(@Param('fileId') fileId, @Res() res): any {
+    return res.sendFile(fileId, {
+      root: `${STATIC!}`,
+    });
   }
 }

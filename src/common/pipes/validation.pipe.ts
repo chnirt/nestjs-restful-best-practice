@@ -1,4 +1,9 @@
-import { Injectable, PipeTransform, ArgumentMetadata } from '@nestjs/common';
+import {
+  Injectable,
+  PipeTransform,
+  ArgumentMetadata,
+  BadRequestException,
+} from '@nestjs/common';
 import { validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 
@@ -12,7 +17,9 @@ export class ValidationPipe implements PipeTransform<any> {
     const object = plainToClass(metatype, value);
     const errors = await validate(object);
     if (errors.length > 0) {
-      throw new Error(`Form Arguments invalid: ${this.formatErrors(errors)}`);
+      throw new BadRequestException(
+        `Form Arguments invalid: ${this.formatErrors(errors)}`,
+      );
     }
     return value;
   }

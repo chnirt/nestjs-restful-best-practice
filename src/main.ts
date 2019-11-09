@@ -11,6 +11,7 @@ import {
   LoggerMiddleware,
   TimeoutInterceptor,
   LoggingInterceptor,
+  HttpExceptionFilter,
 } from './common';
 import { MyLogger } from './config';
 
@@ -43,6 +44,7 @@ async function bootstrap() {
     // interceptors
     app.useGlobalInterceptors(new LoggingInterceptor());
     app.useGlobalInterceptors(new TimeoutInterceptor());
+    app.useGlobalFilters(new HttpExceptionFilter());
 
     // global nest setup
     app.useGlobalPipes(new ValidationPipe());
@@ -58,15 +60,15 @@ async function bootstrap() {
       .setContactEmail('trinhchinchin@mail.com')
       .setExternalDoc('For more information', 'http://swagger.io')
       .addBearerAuth('Authorization', 'header')
-      .setBasePath('/')
+      .setBasePath('/api')
       .build();
 
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('api', app, document);
 
-    // app.setGlobalPrefix('api');
+    app.setGlobalPrefix('api');
 
-    await app.listen(PORT);
+    const server = await app.listen(PORT);
 
     // hot module replacement
     if (module.hot) {
