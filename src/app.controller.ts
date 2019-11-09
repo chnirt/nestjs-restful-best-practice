@@ -132,6 +132,8 @@ export class AppController {
     return ['path', 'path1'];
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   @Get(`${STATIC!}/:fileId`)
   getUpload(@Param('fileId') fileId, @Res() res): any {
     return res.sendFile(fileId, {

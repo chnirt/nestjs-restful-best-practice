@@ -25,8 +25,8 @@ import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ReplaceUserDto } from './dto/replace-user.dto';
 
-// @ApiBearerAuth()
-// @UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiUseTags('users')
 @Controller('users')
