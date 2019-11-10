@@ -26,6 +26,7 @@ async function bootstrap() {
       key: fs.readFileSync('ssl/private.key'),
       cert: fs.readFileSync('ssl/certificate.crt'),
       ca: fs.readFileSync('ssl/ca_bundle.crt'),
+      rejectUnauthorized: false,
     };
 
     const app = await NestFactory.create(AppModule, {
