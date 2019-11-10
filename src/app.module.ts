@@ -13,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { TerminusOptionsService } from './terminus-options.service';
 import { EventsModule } from './modules/events/events.module';
 import { EventsGateway } from './modules/events/events.gateway';
+import { STATIC, SSL } from './environments';
 
 @Module({
   imports: [
@@ -23,7 +24,10 @@ import { EventsGateway } from './modules/events/events.gateway';
       useClass: CacheService,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'static'),
+      rootPath: join(__dirname, '..', STATIC),
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '.well-known/acme-challenge'),
     }),
     TerminusModule.forRootAsync({
       useClass: TerminusOptionsService,

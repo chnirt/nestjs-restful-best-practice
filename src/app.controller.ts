@@ -27,7 +27,7 @@ import { createReadStream } from 'fs';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { LoginUserDto } from './modules/users/dto/login-user.dto';
-import { STATIC, CLOUD_NAME, API_KEY, API_SECRET } from './environments';
+import { STATIC, CLOUD_NAME, API_KEY, API_SECRET, SSL } from './environments';
 import { CreateUserDto } from './modules/users/dto/create-user.dto';
 import { UsersService } from './modules/users/users.service';
 
@@ -132,12 +132,19 @@ export class AppController {
     return ['path', 'path1'];
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
+  // @ApiBearerAuth()
+  // @UseGuards(AuthGuard('jwt'))
   @Get(`${STATIC!}/:fileId`)
   getUpload(@Param('fileId') fileId, @Res() res): any {
     return res.sendFile(fileId, {
       root: `${STATIC!}`,
+    });
+  }
+
+  @Get(`${SSL!}/:fileId`)
+  getSSLKey(@Param('fileId') fileId, @Res() res): any {
+    return res.sendFile(fileId, {
+      root: `${SSL!}`,
     });
   }
 }

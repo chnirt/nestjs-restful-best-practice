@@ -19,6 +19,9 @@ const GRAPHQL_DEPTH_LIMIT: number = +process.env.GRAPHQL_DEPTH_LIMIT || 3;
 // static
 const STATIC: string = process.env.STATIC || 'static';
 
+// ssl
+const SSL: string = process.env.SSL || '.well-known/acme-challenge';
+
 // mlab
 const MLAB_USER = process.env.MLAB_USER || 'admin';
 const MLAB_PASS = process.env.MLAB_PASS || 'chnirt1803';
@@ -100,6 +103,7 @@ export {
   RATE_LIMIT_MAX,
   GRAPHQL_DEPTH_LIMIT,
   STATIC,
+  SSL,
   MLAB_USER,
   MLAB_PASS,
   MLAB_HOST,
