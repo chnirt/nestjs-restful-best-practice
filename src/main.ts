@@ -81,7 +81,7 @@ async function bootstrap() {
       .setContactEmail('trinhchinchin@mail.com')
       .setExternalDoc('For more information', 'http://swagger.io')
       .addBearerAuth('Authorization', 'header')
-      .setBasePath('/api')
+      .setBasePath('/')
       .build();
 
     const document = SwaggerModule.createDocument(app, options);
