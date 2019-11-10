@@ -23,8 +23,9 @@ declare const module: any;
 async function bootstrap() {
   try {
     const httpsOptions = {
-      key: fs.readFileSync('../ssl/private-key.pem'),
-      cert: fs.readFileSync('../ssl/public-certificate.pem'),
+      key: fs.readFileSync('ssl/private.key'),
+      cert: fs.readFileSync('ssl/certificate.crt'),
+      ca: fs.readFileSync('ssl/ca_bundle.crt'),
     };
 
     const app = await NestFactory.create(AppModule, {
@@ -85,7 +86,7 @@ async function bootstrap() {
 
     NODE_ENV !== 'production'
       ? Logger.log(
-          `🚀  Server ready at http://${DOMAIN!}:${chalk
+          `🚀  Server ready at https://${DOMAIN!}:${chalk
             .hex('#87e8de')
             .bold(`${PORT!}`)}`,
           'Bootstrap',
