@@ -5,6 +5,9 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
 import * as fs from 'fs';
+import * as http from 'http';
+import * as https from 'https';
+import * as express from 'express';
 import { AppModule } from './app.module';
 
 import {
@@ -17,6 +20,7 @@ import {
 import { MyLogger } from './config';
 
 import { NODE_ENV, DOMAIN, PORT } from './environments';
+import { ExpressAdapter } from '@nestjs/platform-express';
 
 declare const module: any;
 
@@ -29,11 +33,19 @@ async function bootstrap() {
       rejectUnauthorized: false,
     };
 
-    const app = await NestFactory.create(AppModule, {
-      httpsOptions,
-      logger: new MyLogger(),
-      cors: true,
-    });
+    const server = express();
+
+    const app = await NestFactory.create(
+      AppModule,
+      // {
+      //   httpsOptions,
+      //   logger: new MyLogger(),
+      //   cors: true,
+      // },
+      new ExpressAdapter(server),
+    );
+
+    app.enableCors();
 
     app.use(helmet());
     app.use(
@@ -77,7 +89,10 @@ async function bootstrap() {
 
     // app.setGlobalPrefix('api');
 
-    const server = await app.listen(PORT);
+    await app.init();
+
+    http.createServer(server).listen(PORT!);
+    https.createServer(httpsOptions, server).listen(443);
 
     // hot module replacement
     if (module.hot) {
