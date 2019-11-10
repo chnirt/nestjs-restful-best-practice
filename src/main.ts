@@ -5,9 +5,6 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
 import * as fs from 'fs';
-import * as http from 'http';
-import * as https from 'https';
-import * as express from 'express';
 import { AppModule } from './app.module';
 
 import {
@@ -20,7 +17,6 @@ import {
 import { MyLogger } from './config';
 
 import { NODE_ENV, DOMAIN, PORT } from './environments';
-import { ExpressAdapter } from '@nestjs/platform-express';
 
 declare const module: any;
 
@@ -29,22 +25,14 @@ async function bootstrap() {
     const httpsOptions = {
       key: fs.readFileSync('ssl/private.key'),
       cert: fs.readFileSync('ssl/certificate.crt'),
-      ca: fs.readFileSync('ssl/ca_bundle.crt'),
+      // ca: fs.readFileSync('ssl/ca_bundle.crt'),
     };
 
-    const server = express();
-
-    const app = await NestFactory.create(
-      AppModule,
-      // {
-      //   httpsOptions,
-      //   logger: new MyLogger(),
-      //   cors: true,
-      // },
-      new ExpressAdapter(server),
-    );
-
-    app.enableCors();
+    const app = await NestFactory.create(AppModule, {
+      httpsOptions,
+      logger: new MyLogger(),
+      cors: true,
+    });
 
     app.use(helmet());
     app.use(
@@ -80,7 +68,7 @@ async function bootstrap() {
       .setContactEmail('trinhchinchin@mail.com')
       .setExternalDoc('For more information', 'http://swagger.io')
       .addBearerAuth('Authorization', 'header')
-      .setBasePath('/')
+      .setBasePath('/api')
       .build();
 
     const document = SwaggerModule.createDocument(app, options);
@@ -88,10 +76,7 @@ async function bootstrap() {
 
     // app.setGlobalPrefix('api');
 
-    await app.init();
-
-    http.createServer(server).listen(PORT!);
-    // https.createServer(httpsOptions, server).listen(PORT!);
+    const server = await app.listen(PORT);
 
     // hot module replacement
     if (module.hot) {
