@@ -90,8 +90,8 @@ async function bootstrap() {
 
     await app.init();
 
-    http.createServer(server).listen(80);
-    https.createServer(httpsOptions, server).listen(443);
+    http.createServer(server).listen(PORT!);
+    https.createServer(httpsOptions, server).listen(PORT!);
 
     // hot module replacement
     if (module.hot) {
