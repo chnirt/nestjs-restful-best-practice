@@ -61,7 +61,7 @@ async function bootstrap() {
     app.enableShutdownHooks();
 
     const options = new DocumentBuilder()
-      .setSchemes('https')
+      .setSchemes(NODE_ENV !== 'production' ? 'http' : 'https')
       .setTitle('Nestjs Restful Best Practice')
       .setDescription('built NestJS, TypeORM, MongoDB')
       .setVersion('1.0')
