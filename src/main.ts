@@ -30,7 +30,6 @@ async function bootstrap() {
       key: fs.readFileSync('ssl/private.key'),
       cert: fs.readFileSync('ssl/certificate.crt'),
       ca: fs.readFileSync('ssl/ca_bundle.crt'),
-      rejectUnauthorized: false,
     };
 
     const server = express();
@@ -91,7 +90,7 @@ async function bootstrap() {
 
     await app.init();
 
-    http.createServer(server).listen(PORT!);
+    http.createServer(server).listen(80);
     https.createServer(httpsOptions, server).listen(443);
 
     // hot module replacement
