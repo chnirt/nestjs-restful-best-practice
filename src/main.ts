@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
+import * as fs from 'fs';
 import { AppModule } from './app.module';
 
 import {
@@ -21,7 +22,13 @@ declare const module: any;
 
 async function bootstrap() {
   try {
+    const httpsOptions = {
+      key: fs.readFileSync('./secrets/private-key.pem'),
+      cert: fs.readFileSync('./secrets/public-certificate.pem'),
+    };
+
     const app = await NestFactory.create(AppModule, {
+      httpsOptions,
       logger: new MyLogger(),
       cors: true,
     });
