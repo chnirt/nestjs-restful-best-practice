@@ -68,13 +68,13 @@ async function bootstrap() {
       .setContactEmail('trinhchinchin@mail.com')
       .setExternalDoc('For more information', 'http://swagger.io')
       .addBearerAuth('Authorization', 'header')
-      .setBasePath('/api')
+      .setBasePath('/')
       .build();
 
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('api', app, document);
 
-    app.setGlobalPrefix('api');
+    // app.setGlobalPrefix('api');
 
     const server = await app.listen(PORT);
 
