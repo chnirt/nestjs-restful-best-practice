@@ -23,8 +23,10 @@ async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule, {
       logger: new MyLogger(),
-      cors: true,
+      // cors: true,
     });
+
+    app.enableCors();
 
     app.use(helmet());
     app.use(
