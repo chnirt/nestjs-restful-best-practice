@@ -22,14 +22,13 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as cloudinary from 'cloudinary';
-import { createReadStream } from 'fs';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { LoginUserDto } from './modules/users/dto/login-user.dto';
-import { STATIC, CLOUD_NAME, API_KEY, API_SECRET, SSL } from './environments';
+import { STATIC, SSL } from './environments';
 import { CreateUserDto } from './modules/users/dto/create-user.dto';
 import { UsersService } from './modules/users/users.service';
+import { uploadFile } from './shared/upload';
 
 @ApiUseTags('basic')
 @Controller()
@@ -44,14 +43,6 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
-  }
-
-  @ApiOperation({
-    title: 'Create one User',
-  })
-  @Post('register')
-  async register(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
   }
 
   @UseGuards(AuthGuard('local'))
@@ -71,8 +62,8 @@ export class AppController {
     return req.user;
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
+  // @ApiBearerAuth()
+  // @UseGuards(AuthGuard('jwt'))
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
@@ -82,39 +73,9 @@ export class AppController {
     description: 'one file.',
   })
   async uploadFile(@UploadedFile() file) {
-    // console.log(file);
+    const path = await uploadFile(file);
 
-    cloudinary.config({
-      cloud_name: CLOUD_NAME!,
-      api_key: API_KEY!,
-      api_secret: API_SECRET!,
-    });
-
-    const uniqueFilename = new Date().toISOString();
-
-    const result = await new Promise(async (resolve, reject) =>
-      createReadStream(file)
-        .pipe(
-          cloudinary.v2.uploader.upload_stream(
-            {
-              folder: 'restful',
-              public_id: uniqueFilename,
-              tags: `restful`,
-            }, // directory and tags are optional
-            (err, image) => {
-              if (err) {
-                reject(err);
-              }
-              resolve(image);
-            },
-          ),
-        )
-        .on('close', () => {
-          resolve(true);
-        })
-        .on('error', () => reject(false)),
-    );
-    return result['secure_url'];
+    return path;
   }
 
   @ApiBearerAuth()

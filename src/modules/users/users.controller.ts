@@ -3,7 +3,6 @@ import {
   UseGuards,
   Post,
   Get,
-  Request,
   Param,
   ClassSerializerInterceptor,
   UseInterceptors,
@@ -19,14 +18,18 @@ import {
   ApiBearerAuth,
   ApiUseTags,
   ApiOperation,
+  ApiResponse,
 } from '@nestjs/swagger';
+
+import { UserEntity } from './user.entity';
 
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ReplaceUserDto } from './dto/replace-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
-@ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'))
+// @ApiBearerAuth()
+// @UseGuards(AuthGuard('jwt'))
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiUseTags('users')
 @Controller('users')
@@ -44,9 +47,28 @@ export class UsersController {
   }
 
   @ApiOperation({
+    title: 'Create one User',
+  })
+  @Post()
+  @ApiResponse({
+    status: 201,
+    description: 'The record has been successfully created.',
+    type: UserEntity,
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  register(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
+  }
+
+  @ApiOperation({
     title: 'Retrieve one User',
   })
   @Get(':_id')
+  @ApiResponse({
+    status: 200,
+    description: 'The found record',
+    type: UserEntity,
+  })
   findOne(@Param('_id') _id: string) {
     return this.userService.findOne(_id);
   }

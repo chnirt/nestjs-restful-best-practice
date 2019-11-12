@@ -2,22 +2,22 @@ import { ApiModelProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsEmail, Length } from 'class-validator';
 
 export class CreateUserDto {
-  @ApiModelProperty()
+  @ApiModelProperty({ description: 'The name of the User' })
   @Length(5, 20)
   @IsNotEmpty()
-  name: string;
+  readonly name: string;
 
-  @ApiModelProperty()
+  @ApiModelProperty({ description: 'The email of the User' })
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  readonly email: string;
 
-  @ApiModelProperty()
+  @ApiModelProperty({ description: 'The password of the User' })
   @IsNotEmpty()
-  password: string;
+  readonly password: string;
 
-  @ApiModelProperty()
+  @ApiModelProperty({ description: 'The referralCode of the User' })
   @Length(8, 8)
   @IsNotEmpty()
-  referralCode: string;
+  readonly referralCode: string;
 }
