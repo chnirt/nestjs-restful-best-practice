@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import chalk from 'chalk';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as bodyParser from 'body-parser';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
 import * as fs from 'fs';
@@ -35,6 +36,17 @@ async function bootstrap() {
     });
 
     app.use(helmet());
+
+    // body parser
+    app.use(bodyParser.json({ limit: '50mb' }));
+    app.use(
+      bodyParser.urlencoded({
+        limit: '50mb',
+        extended: true,
+        parameterLimit: 50000,
+      }),
+    );
+
     app.use(
       rateLimit({
         windowMs: 15 * 60 * 1000, // 15 minutes
@@ -69,13 +81,13 @@ async function bootstrap() {
       .setContactEmail('trinhchinchin@mail.com')
       .setExternalDoc('For more information', 'http://swagger.io')
       .addBearerAuth('Authorization', 'header')
-      .setBasePath('/')
+      .setBasePath('/v1')
       .build();
 
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('api', app, document);
 
-    // app.setGlobalPrefix('api');
+    app.setGlobalPrefix('/v1');
 
     const server = await app.listen(PORT);
 

@@ -33,6 +33,15 @@ export class UserEntity {
   @Column()
   referralCode: string;
 
+  @Column()
+  countryCode: string;
+  @Column()
+  phone: string;
+  @Column()
+  verified: boolean;
+  @Column()
+  authyId: string;
+
   @ApiModelProperty({ description: 'The createdAt of the User' })
   @Column()
   createdAt: number;

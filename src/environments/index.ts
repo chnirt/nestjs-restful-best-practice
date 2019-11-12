@@ -92,6 +92,12 @@ const STRIPE_PUBLIC_KEY: string = process.env.STRIPE_PUBLIC_KEY || 'xxx';
 const STRIPE_SECRET_KEY: string = process.env.STRIPE_SECRET_KEY || 'xxx';
 const STRIPE_PLAN: string = process.env.STRIPE_PLAN || 'xxx';
 
+// twilio
+const TWILIO_ACCOUNT_SID: string =
+  process.env.TWILIO_ACCOUNT_SID || 'ACc13f500214d3d428cdf858705aff760c';
+const TWILIO_AUTH_TOKEN: string =
+  process.env.TWILIO_AUTH_TOKEN || 'bfc93e1124f8b632542d8be738ec6e18';
+
 export {
   NODE_ENV,
   AUTHOR,

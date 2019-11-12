@@ -44,7 +44,7 @@
     "cache-manager": "^2.10.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.0",
-    "cloudinary": "^1.16.0",
+    "cloudinary": "1.16.0",
     "dotenv": "^8.2.0",
     "express-rate-limit": "^5.0.0",
     "helmet": "^3.21.2",

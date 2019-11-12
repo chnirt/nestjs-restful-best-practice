@@ -9,7 +9,6 @@ import {
   UseInterceptors,
   UploadedFile,
   CacheInterceptor,
-  Body,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -37,7 +36,6 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly authService: AuthService,
-    private readonly userService: UsersService,
   ) {}
 
   @Get()
@@ -89,7 +87,7 @@ export class AppController {
     description: 'List of files.',
   })
   uploadFiles(@UploadedFile() files) {
-    console.log(files);
+    // console.log(files);
     return ['path', 'path1'];
   }
 
