@@ -73,15 +73,23 @@ async function bootstrap() {
     app.enableShutdownHooks();
 
     const options = new DocumentBuilder()
-      .setSchemes(NODE_ENV !== 'production' ? 'http' : 'https')
       .setTitle('Nestjs Restful Best Practice')
-      .setDescription('built NestJS, TypeORM, MongoDB')
-      .setVersion('1.0')
-      .addTag('chnirt', 'developer')
-      .setContactEmail('trinhchinchin@mail.com')
-      .setExternalDoc('For more information', 'http://swagger.io')
-      .addBearerAuth('Authorization', 'header')
+      .setVersion('2.0.0')
+      .setHost('nestjs-restful-best-practice.herokuapp.com')
       .setBasePath('/v1')
+      .setDescription('built NestJS, TypeORM, MongoDB')
+      .setTermsOfService(
+        'https://github.com/chnirt/nestjs-restful-best-practice/blob/master/LICENSE',
+      )
+      .setContactEmail('trinhchinchin@gmail.com')
+      .setLicense(
+        'MIT License',
+        'https://github.com/chnirt/nestjs-restful-best-practice/blob/master/LICENSE',
+      )
+      .setExternalDoc('For more information', 'http://swagger.io')
+      .setSchemes(NODE_ENV !== 'production' ? 'http' : 'https')
+      .addBearerAuth('Authorization', 'header')
+      .addTag('chnirt', 'developer')
       .build();
 
     const document = SwaggerModule.createDocument(app, options);

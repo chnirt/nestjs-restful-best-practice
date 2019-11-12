@@ -38,8 +38,8 @@ export class UsersController {
 
   @ApiOperation({
     title: 'Retrieve many User',
-    // description: 'Aaa',
-    // operationId: 'aaaa',
+    description: 'Aaa',
+    operationId: 'aaaa',
   })
   @Get()
   findAll() {

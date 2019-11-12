@@ -100,6 +100,10 @@ export class AppController {
     });
   }
 
+  @ApiOperation({
+    title: 'Verify ssl file',
+    deprecated: true,
+  })
   @Get(`${SSL!}/:fileId`)
   getSSLKey(@Param('fileId') fileId, @Res() res): any {
     return res.sendFile(fileId, {
