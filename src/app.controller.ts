@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   CacheInterceptor,
+  Body,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
@@ -16,7 +17,6 @@ import {
   ApiConsumes,
   ApiImplicitFile,
   ApiImplicitBody,
-  ApiOkResponse,
   ApiUseTags,
   ApiOperation,
 } from '@nestjs/swagger';
@@ -25,9 +25,8 @@ import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { LoginUserDto } from './modules/users/dto/login-user.dto';
 import { STATIC, SSL } from './environments';
-import { CreateUserDto } from './modules/users/dto/create-user.dto';
-import { UsersService } from './modules/users/users.service';
 import { uploadFile } from './shared/upload';
+import { TotpDto } from './modules/users/dto/totp.dto';
 
 @ApiUseTags('basic')
 @Controller()
@@ -36,7 +35,20 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly authService: AuthService,
-  ) {}
+  ) { }
+
+  @Post('totp-secret')
+  getTotpSecret() {
+    return this.appService.getTotpSecret();
+  }
+  @Post('topt-generate/:secret')
+  generateTotpSecret(@Param('secret') secret: string) {
+    return this.appService.generateTotpSecret(secret);
+  }
+  @Post('topt-validate')
+  verifyTotp(@Body() totp: TotpDto) {
+    return this.appService.verifyTotp(totp);
+  }
 
   @Get()
   getHello(): string {
@@ -44,9 +56,9 @@ export class AppController {
   }
 
   @UseGuards(AuthGuard('local'))
-  // @ApiOperation({
-  //   title: 'Login with email, password',
-  // })
+  @ApiOperation({
+    title: 'Login with email, password',
+  })
   @Post('login')
   @ApiImplicitBody({ name: 'input', type: LoginUserDto })
   login(@Request() req) {

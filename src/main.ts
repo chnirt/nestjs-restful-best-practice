@@ -75,7 +75,7 @@ async function bootstrap() {
     const options = new DocumentBuilder()
       .setTitle('Nestjs Restful Best Practice')
       .setVersion('2.0.0')
-      .setHost('nestjs-restful-best-practice.herokuapp.com')
+      // .setHost('nestjs-restful-best-practice.herokuapp.com')
       .setBasePath('/v1')
       .setDescription('built NestJS, TypeORM, MongoDB')
       .setTermsOfService(
@@ -107,17 +107,17 @@ async function bootstrap() {
 
     NODE_ENV !== 'production'
       ? Logger.log(
-          `🚀  Server ready at https://${DOMAIN!}:${chalk
-            .hex('#87e8de')
-            .bold(`${PORT!}`)}`,
-          'Bootstrap',
-        )
+        `🚀  Server ready at https://${DOMAIN!}:${chalk
+          .hex('#87e8de')
+          .bold(`${PORT!}`)}`,
+        'Bootstrap',
+      )
       : Logger.log(
-          `🚀  Server is listening on port ${chalk
-            .hex('#87e8de')
-            .bold(`${PORT!}`)}`,
-          'Bootstrap',
-        );
+        `🚀  Server is listening on port ${chalk
+          .hex('#87e8de')
+          .bold(`${PORT!}`)}`,
+        'Bootstrap',
+      );
   } catch (error) {
     // logger.error(error)
     Logger.error(`❌  Error starting server, ${error}`, '', 'Bootstrap', false);
