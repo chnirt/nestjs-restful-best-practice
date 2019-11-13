@@ -34,13 +34,13 @@ export class UserEntity {
   referralCode: string;
 
   @Column()
-  countryCode: string;
+  countryCode: string; // Vietname +84
   @Column()
-  phone: string;
+  phone: string; // 0704498756
   @Column()
-  verified: boolean;
+  verified: boolean; // false
   @Column()
-  authyId: string;
+  authyId: string; // null
 
   @ApiModelProperty({ description: 'The createdAt of the User' })
   @Column()

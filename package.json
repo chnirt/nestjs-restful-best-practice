@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "webpack": "NODE_ENV=development nest build --watch --webpack",
-    "start:hmr": "node dist/server",
+    "start:hmr": "node dist/main",
     "heroku-postbuild": "npm i --only=dev --no-shrinkwrap && npm run build",
     "doc": "npx compodoc --port 11045 -p tsconfig.json -s",
     "doc:serve": "npm run doc && npx compodoc -s"
@@ -57,9 +57,11 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",
+    "speakeasy": "^2.0.0",
     "swagger-ui-express": "^4.1.2",
     "typeorm": "^0.2.20",
     "uuid": "^3.3.3",
+    "webpack-bundle-analyzer": "^3.6.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
@@ -78,6 +80,7 @@
     "@types/supertest": "^2.0.8",
     "jest": "^24.9.0",
     "prettier": "^1.18.2",
+    "progress-bar-webpack-plugin": "^1.12.1",
     "supertest": "^4.0.2",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.1.1",
