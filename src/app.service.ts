@@ -10,9 +10,7 @@ export class AppService {
 
   async getTotpSecret() {
     const options = {
-      issuer: `Pony Foo`,
-      name: `Pony Foo ()`,
-      length: 64,
+      length: 20,
     };
 
     const { base32, otpauth_url } = await speakeasy.generateSecret(options);
