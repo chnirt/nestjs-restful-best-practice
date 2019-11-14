@@ -1,7 +1,7 @@
-import * as cloudinary from 'cloudinary';
-import * as fs from 'fs';
+import * as cloudinary from 'cloudinary'
+import * as fs from 'fs'
 
-import { CLOUD_NAME, API_KEY, API_SECRET } from '../../environments';
+import { CLOUD_NAME, API_KEY, API_SECRET } from '../../environments'
 
 /**
  * Returns image url by upload file.
@@ -15,31 +15,31 @@ import { CLOUD_NAME, API_KEY, API_SECRET } from '../../environments';
  * @beta
  */
 export const uploadFile = async (file: any): Promise<any> => {
-  cloudinary.config({
-    cloud_name: CLOUD_NAME!,
-    api_key: API_KEY!,
-    api_secret: API_SECRET!,
-  });
+	cloudinary.config({
+		cloud_name: CLOUD_NAME!,
+		api_key: API_KEY!,
+		api_secret: API_SECRET!
+	})
 
-  const uniqueFilename = new Date().toISOString();
+	const uniqueFilename = new Date().toISOString()
 
-  const result = await new Promise(async (resolve, reject) => {
-    cloudinary.v2.uploader
-      .upload_stream(
-        {
-          folder: 'rest',
-          public_id: uniqueFilename,
-          tags: `rest`,
-        }, // directory and tags are optional
-        (err, image) => {
-          if (err) {
-            reject(err);
-          }
-          resolve(image);
-        },
-      )
-      .end(file.buffer);
-  });
+	const result = await new Promise(async (resolve, reject) => {
+		cloudinary.v2.uploader
+			.upload_stream(
+				{
+					folder: 'rest',
+					public_id: uniqueFilename,
+					tags: 'rest'
+				}, // directory and tags are optional
+				(err, image) => {
+					if (err) {
+						reject(err)
+					}
+					resolve(image)
+				}
+			)
+			.end(file.buffer)
+	})
 
-  return result['secure_url'];
-};
+	return result['secure_url']
+}
