@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { getMongoRepository } from 'typeorm';
 
 import { CreateDealDto } from './dto/create-deal.dto';
@@ -25,6 +25,11 @@ export class DealsService {
 
   async insert(createDealDto: CreateDealDto, file: any, req: any) {
     // console.log(createDealDto, file, req.user._id)
+
+    if (file.size > 1080 * 1080 * 2) {
+      throw new ForbiddenException('The import file is too large to upload.')
+    }
+
     const { dealType } = createDealDto
 
     const option = dealType === 'Request'

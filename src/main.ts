@@ -38,12 +38,12 @@ async function bootstrap() {
 		app.use(helmet())
 
 		// body parser
-		app.use(bodyParser.json({ limit: '5mb' }))
+		app.use(bodyParser.json({ limit: '2mb' }))
 		app.use(
 			bodyParser.urlencoded({
-				limit: '5mb',
+				limit: '2mb',
 				extended: true,
-				parameterLimit: 5000
+				parameterLimit: 2000
 			})
 		)
 
