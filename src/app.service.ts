@@ -33,7 +33,7 @@ export class AppService {
     const verified = await speakeasy.totp.verify({
       encoding: 'base32',
       ...totp,
-      window: 0,
+      window: 6,
     });
 
     return verified;
