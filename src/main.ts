@@ -38,12 +38,12 @@ async function bootstrap() {
 		app.use(helmet())
 
 		// body parser
-		app.use(bodyParser.json({ limit: '50mb' }))
+		app.use(bodyParser.json({ limit: '5mb' }))
 		app.use(
 			bodyParser.urlencoded({
-				limit: '50mb',
+				limit: '5mb',
 				extended: true,
-				parameterLimit: 50000
+				parameterLimit: 5000
 			})
 		)
 
@@ -107,17 +107,17 @@ async function bootstrap() {
 
 		NODE_ENV !== 'production'
 			? Logger.log(
-					`🚀  Server ready at https://${DOMAIN!}:${chalk
-						.hex('#87e8de')
-						.bold(`${PORT!}`)}`,
-					'Bootstrap'
-			  )
+				`🚀  Server ready at https://${DOMAIN!}:${chalk
+					.hex('#87e8de')
+					.bold(`${PORT!}`)}`,
+				'Bootstrap'
+			)
 			: Logger.log(
-					`🚀  Server is listening on port ${chalk
-						.hex('#87e8de')
-						.bold(`${PORT!}`)}`,
-					'Bootstrap'
-			  )
+				`🚀  Server is listening on port ${chalk
+					.hex('#87e8de')
+					.bold(`${PORT!}`)}`,
+				'Bootstrap'
+			)
 	} catch (error) {
 		// logger.error(error)
 		Logger.error(`❌  Error starting server, ${error}`, '', 'Bootstrap', false)
