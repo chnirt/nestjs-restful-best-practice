@@ -27,15 +27,20 @@ export class DealsService {
     // console.log(createDealDto, file, req.user._id)
     const { dealType } = createDealDto
 
-    const thumbnail = await uploadFile(file)
-    // const thumbnail = ''
     const option = dealType === 'Request'
       ? { requester: req.user._id }
       : { offerer: req.user._id }
 
-    const newDeal = await getMongoRepository(DealEntity).save(
-      new DealEntity({ ...createDealDto, ...option })
-    )
+    const thumbnail = await uploadFile(file)
+
+    const convertCreateDealDto = {
+      ...createDealDto,
+      expiredAt: +new Date() + 1000 * createDealDto.duration,
+      ...option
+    }
+    delete convertCreateDealDto.duration
+
+    const newDeal = await getMongoRepository(DealEntity).save(convertCreateDealDto)
 
     return newDeal
   }
