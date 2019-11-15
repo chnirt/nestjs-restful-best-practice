@@ -14,6 +14,7 @@ import { TerminusOptionsService } from './terminus-options.service';
 import { EventsModule } from './modules/events/events.module';
 import { EventsGateway } from './modules/events/events.gateway';
 import { STATIC, SSL } from './environments';
+import { DealsModule } from './modules/deals/deals.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { STATIC, SSL } from './environments';
     UsersModule,
     AuthModule,
     EventsModule,
+    DealsModule,
   ],
   controllers: [AppController],
   providers: [AppService, EventsGateway],
