@@ -16,7 +16,7 @@ export class AuthService {
 
 		if (user && (await comparePassword(pass, user.password))) {
 			const { password, ...result } = user
-			console.log(user)
+
 			return result
 		}
 
@@ -25,8 +25,13 @@ export class AuthService {
 
 	async login(user: UserEntity) {
 		const payload = { sub: user._id, name: user.name }
+		const expiresIn = 3600
+
 		return {
-			access_token: this.jwtService.sign(payload)
+			access_token: this.jwtService.sign(payload, {
+				expiresIn
+			}),
+			expiresIn
 		}
 	}
 }

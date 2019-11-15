@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import { CreateUserDto } from './dto/create-user.dto'
 import { getMongoRepository } from 'typeorm'
-import speakeasy from 'speakeasy'
+import * as speakeasy from 'speakeasy'
 
 import { UserEntity } from './user.entity'
 import { hashPassword } from '../../utils'
