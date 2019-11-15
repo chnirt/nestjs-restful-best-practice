@@ -17,7 +17,7 @@ export class DealsService {
     const foundDeal = await getMongoRepository(DealEntity).findOne({ _id })
 
     if (!foundDeal) {
-      throw new NotFoundException('Deal not found.')
+      throw new NotFoundException('Deal not found')
     }
 
     return foundDeal
@@ -35,6 +35,7 @@ export class DealsService {
 
     const convertCreateDealDto = {
       ...createDealDto,
+      thumbnail,
       expiredAt: +new Date() + 1000 * createDealDto.duration,
       ...option
     }
