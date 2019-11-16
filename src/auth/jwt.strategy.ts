@@ -1,7 +1,9 @@
 import { ExtractJwt, Strategy } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
-import { Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { ACCESS_TOKEN_SECRET } from '../environments'
+import { getMongoRepository } from 'typeorm'
+import { UserEntity } from '../modules/users/user.entity'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -14,6 +16,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 	}
 
 	async validate(payload: any) {
-		return { _id: payload.sub, name: payload.name }
+		try {
+			const { sub } = payload
+
+			const user = await getMongoRepository(UserEntity).findOne({ _id: sub })
+
+			const { password, ...result } = user
+
+			return result
+		} catch (err) {
+			throw new UnauthorizedException()
+		}
 	}
 }

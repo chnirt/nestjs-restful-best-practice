@@ -19,11 +19,11 @@ export type User = any
 const TOTP_STEP: number = 20
 @Injectable()
 export class UsersService {
-	async create(
-		input: CreateUserDto,
+	async insert(
+		createUserDto: CreateUserDto,
 		req: any
-	): Promise<UserEntity | undefined> {
-		const { email } = input
+	): Promise<User | undefined> {
+		const { email } = createUserDto
 
 		const existedUser = await getMongoRepository(UserEntity).findOne({ email })
 
@@ -33,8 +33,8 @@ export class UsersService {
 
 		const newUser = await getMongoRepository(UserEntity).save(
 			new UserEntity({
-				...input,
-				password: await hashPassword(input.password)
+				...createUserDto,
+				password: await hashPassword(createUserDto.password)
 			})
 		)
 
@@ -109,14 +109,16 @@ export class UsersService {
 		return updateUser
 	}
 
-	async deleteOne(_id: string): Promise<User | undefined> {
+	async deleteOne(_id: string): Promise<boolean | undefined> {
 		const foundUser = await getMongoRepository(UserEntity).findOne({ _id })
 
 		if (!foundUser) {
 			throw new NotFoundException('User not found.')
 		}
 
-		return await getMongoRepository(UserEntity).delete(foundUser)
+		return (await getMongoRepository(UserEntity).delete(foundUser))
+			? true
+			: false
 	}
 
 	async findOneWithEmail(email: string): Promise<User | undefined> {

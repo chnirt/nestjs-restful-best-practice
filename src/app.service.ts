@@ -31,7 +31,7 @@ export class AppService {
 			secret: 'OTP_KEY',
 			encoding: 'base32',
 			step: TOTP_STEP, // 30s
-			window: 1
+			window: 0
 		})
 
 		return verified

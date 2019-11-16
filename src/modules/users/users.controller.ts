@@ -15,8 +15,6 @@ import {
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import {
-	ApiImplicitBody,
-	ApiOkResponse,
 	ApiBearerAuth,
 	ApiUseTags,
 	ApiOperation,
@@ -32,8 +30,19 @@ import { UsersService } from './users.service'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { ReplaceUserDto } from './dto/replace-user.dto'
 
-// @ApiBearerAuth()
-// @UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
+@UseGuards(AuthGuard('jwt'))
+@ApiResponse({
+	status: 200,
+	description: 'The found record',
+	type: [UserEntity]
+})
+@ApiResponse({
+	status: 201,
+	description: 'The record has been successfully created.',
+	type: UserEntity
+})
+@ApiResponse({ status: 403, description: 'Forbidden.' })
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiUseTags('users')
 @Controller('users')
@@ -41,9 +50,7 @@ export class UsersController {
 	constructor(private readonly userService: UsersService) {}
 
 	@ApiOperation({
-		title: 'Retrieve many User'
-		// description: 'Aaa',
-		// operationId: 'aaaa'
+		title: 'Retrieve many Users'
 	})
 	@Get()
 	findAll() {
@@ -54,25 +61,14 @@ export class UsersController {
 		title: 'Create one User'
 	})
 	@Post()
-	@ApiResponse({
-		status: 201,
-		description: 'The record has been successfully created.',
-		type: UserEntity
-	})
-	@ApiResponse({ status: 403, description: 'Forbidden.' })
-	register(@Body() createUserDto: CreateUserDto, @Request() req) {
-		return this.userService.create(createUserDto, req)
+	insert(@Body() createUserDto: CreateUserDto, @Request() req) {
+		return this.userService.insert(createUserDto, req)
 	}
 
 	@ApiOperation({
 		title: 'Retrieve one User'
 	})
 	@Get(':id')
-	@ApiResponse({
-		status: 200,
-		description: 'The found record',
-		type: [UserEntity]
-	})
 	findOne(@Param('id') id: string) {
 		return this.userService.findOne(id)
 	}
@@ -105,13 +101,13 @@ export class UsersController {
 		title: 'Update one Avatar for current User'
 	})
 	@Post('avatar')
-	@UseInterceptors(FileInterceptor('file'))
 	@ApiConsumes('multipart/form-data')
 	@ApiImplicitFile({
-		name: 'file',
+		name: 'avatar',
 		required: true,
-		description: 'one file.'
+		description: 'Send one file'
 	})
+	@UseInterceptors(FileInterceptor('avatar'))
 	updateAvatar(@UploadedFile() file, @Request() req) {
 		const { user } = req
 		const { _id } = user

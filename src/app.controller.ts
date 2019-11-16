@@ -35,7 +35,7 @@ export class AppController {
 	constructor(
 		private readonly appService: AppService,
 		private readonly authService: AuthService
-	) {}
+	) { }
 
 	@Post('totp-generate')
 	generateTotpToken() {
@@ -71,13 +71,13 @@ export class AppController {
 	// @ApiBearerAuth()
 	// @UseGuards(AuthGuard('jwt'))
 	@Post('upload')
-	@UseInterceptors(FileInterceptor('file'))
 	@ApiConsumes('multipart/form-data')
 	@ApiImplicitFile({
 		name: 'file',
 		required: true,
 		description: 'one file.'
 	})
+	@UseInterceptors(FileInterceptor('file'))
 	async uploadFile(@UploadedFile() file) {
 		const path = await uploadFile(file)
 

@@ -24,8 +24,9 @@ export class AuthService {
 	}
 
 	async login(user: UserEntity) {
-		const payload = { sub: user._id, name: user.name }
-		const expiresIn = 3600
+		const { _id } = user
+		const payload = { sub: _id }
+		const expiresIn = 60 * 60 * 24 * 30
 
 		return {
 			access_token: this.jwtService.sign(payload, {
