@@ -23,15 +23,19 @@ import {
 	ApiImplicitFile
 } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
+import * as jwt from 'jsonwebtoken'
 
 import { UserEntity } from './user.entity'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UsersService } from './users.service'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { ReplaceUserDto } from './dto/replace-user.dto'
+import { VerifyUserDto } from './dto/verify-user.dto'
+import { ACCESS_TOKEN_SECRET } from '../../environments'
+import { OtpUserDto } from './dto/otp-user.dto'
 
-@ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'))
+// @ApiBearerAuth()
+// @UseGuards(AuthGuard('jwt'))
 @ApiResponse({
 	status: 200,
 	description: 'The found record',
@@ -61,8 +65,10 @@ export class UsersController {
 		title: 'Create one User'
 	})
 	@Post()
-	insert(@Body() createUserDto: CreateUserDto, @Request() req) {
-		return this.userService.insert(createUserDto, req)
+	async insert(@Body() createUserDto: CreateUserDto) {
+		const newUser = await this.userService.insert(createUserDto)
+
+		return newUser
 	}
 
 	@ApiOperation({
@@ -113,5 +119,31 @@ export class UsersController {
 		const { _id } = user
 
 		return this.userService.updateAvatar(_id, file)
+	}
+
+	@ApiOperation({
+		title: 'Otp one User'
+	})
+	@Post('/otp')
+	otp(@Body() otpUserDto: OtpUserDto) {
+		return this.userService.otp(otpUserDto)
+	}
+
+	@ApiOperation({
+		title: 'Verify one User'
+	})
+	@Post('/verify')
+	async verify(@Body() verifyUserDto: VerifyUserDto) {
+		const updateUser = await this.userService.verify(verifyUserDto)
+		// console.log(updateUser)
+		const { _id } = updateUser
+
+		const expiresIn = '30d'
+		const payload = { sub: _id, expiresIn }
+
+		return {
+			access_token: jwt.sign(payload, ACCESS_TOKEN_SECRET!, { expiresIn }),
+			expiresIn
+		}
 	}
 }

@@ -17,10 +17,18 @@ export class DealsService {
 		// console.log(query)
 		const { offset, limit } = query
 
+		if (offset < 1) {
+			throw new ForbiddenException('The offset must be greater than 0')
+		}
+
+		if (limit < 1) {
+			throw new ForbiddenException('The offset must be greater than 0')
+		}
+
 		return getMongoRepository(DealEntity)
 			.aggregate([
-				{ $skip: (+offset < 1 ? 1 : +offset) | 0 },
-				{ $limit: (+limit < 1 ? 1 : +limit) | 100 },
+				{ $skip: +offset | 0 },
+				{ $limit: +limit | 100 },
 				{ $sort: { _id: -1 } },
 				{
 					$lookup: {

@@ -17,20 +17,15 @@ import {
  * @remarks
  * This method is part of the {@link shared/mail}.
  *
- * @param type - 1st input number
- * @param user - 2nd input number
- * @param req - 3rd input number
- * @param token - 4th input number
- * @param _id - 5th input number
- * @returns The any mean of `type`, `user`, `req`, `token` and `_id`
+ * @param user - 1st input number
+ * @param token - 2nd input number
+ * @returns The any mean of `user` and `token`
  *
  * @beta
  */
 export const sendMail = async (
 	user: UserEntity,
-	req: any,
-	token: string,
-	_id: string
+	token: string
 ): Promise<any> => {
 	const transporter = await nodemailer.createTransport({
 		service: 'gmail',
@@ -67,12 +62,10 @@ export const sendMail = async (
 			street: 'Su Van Hanh',
 			city: 'Ho Chi Minh',
 			country: 'Viet Nam',
-			to: user.name,
-			tracking: `http://${req.headers.host}/${END_POINT}/${_id}`
+			to: user.name
 		}
 
 		const replacements = {
-			// link: `${req.headers.origin}/verify/${token}`,
 			subject: 'Email OTP Verification',
 			text1: 'To complete your sign up, please verify your OTP: ',
 			button: token,

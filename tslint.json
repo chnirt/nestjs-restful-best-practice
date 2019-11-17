@@ -17,7 +17,8 @@
 		"variable-name": [true, "allow-leading-underscore"],
 		"indent": false,
 		"trailing-comma": false,
-		"semicolon": false
+		"semicolon": false,
+		"no-bitwise": false
 	},
 	"rulesDirectory": []
 }

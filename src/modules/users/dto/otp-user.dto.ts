@@ -1,7 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsEmail } from 'class-validator'
+import { IsNotEmpty, IsEmail, IsMobilePhone } from 'class-validator'
 
-export class LoginUserDto {
+export class OtpUserDto {
 	@ApiModelProperty({
 		default: 'trinhchin.innos@gmail.com',
 		example: 'trinhchin.innos@gmail.com',
@@ -12,10 +12,12 @@ export class LoginUserDto {
 	readonly email: string
 
 	@ApiModelProperty({
-		default: '0',
-		example: '0',
-		description: 'The password of the User'
+		default: '+6595555972',
+		example: '+6595555972',
+		description: 'The phone of the User'
 	})
+	// @IsMobilePhone('vi-VN')
+	@IsMobilePhone('en-SG')
 	@IsNotEmpty()
-	readonly password: string
+	readonly phone: string
 }

@@ -6,6 +6,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto'
 import { getMongoRepository } from 'typeorm'
 import * as speakeasy from 'speakeasy'
+import { Validator } from 'class-validator'
 
 import { UserEntity } from './user.entity'
 import { hashPassword } from '../../utils'
@@ -14,15 +15,20 @@ import { ReplaceUserDto } from './dto/replace-user.dto'
 
 import { uploadFile, sendMail } from '../../shared'
 
+import {
+	SPEAKEASY_SECRET,
+	SPEAKEASY_DIGITS,
+	SPEAKEASY_STEP
+} from '../../environments'
+import { OtpUserDto } from './dto/otp-user.dto'
+import { VerifyUserDto } from './dto/verify-user.dto'
+
+const validator = new Validator()
 export type User = any
 
-const TOTP_STEP: number = 20
 @Injectable()
 export class UsersService {
-	async insert(
-		createUserDto: CreateUserDto,
-		req: any
-	): Promise<User | undefined> {
+	async insert(createUserDto: CreateUserDto): Promise<User | undefined> {
 		const { email } = createUserDto
 
 		const existedUser = await getMongoRepository(UserEntity).findOne({ email })
@@ -37,20 +43,6 @@ export class UsersService {
 				password: await hashPassword(createUserDto.password)
 			})
 		)
-
-		const token = await speakeasy.totp({
-			secret: 'OTP_KEY',
-			encoding: 'base32',
-			digits: 6,
-			step: TOTP_STEP // 30s
-			// window: 1 // pre 30s cur 30s nxt 30s
-		})
-
-		// const remaining = TOTP_STEP - Math.floor((+new Date() / 1000.0) % TOTP_STEP)
-
-		const _id = ''
-
-		await sendMail(newUser, req, token, _id)
 
 		return newUser
 	}
@@ -133,12 +125,87 @@ export class UsersService {
 
 	async updateAvatar(_id: string, file: any): Promise<boolean | undefined> {
 		// console.log(_id, file)
-		const user = await getMongoRepository(UserEntity).findOne({ _id })
+		const foundUser = await getMongoRepository(UserEntity).findOne({ _id })
 
-		user.avatar = await uploadFile(file)
+		if (!foundUser) {
+			throw new NotFoundException('User not found.')
+		}
 
-		const updateUser = await getMongoRepository(UserEntity).save(user)
+		foundUser.avatar = await uploadFile(file)
+
+		const updateUser = await getMongoRepository(UserEntity).save(foundUser)
 
 		return updateUser ? true : false
+	}
+
+	async otp(otpUserDto: OtpUserDto) {
+		const { email, phone } = otpUserDto
+
+		validator.isMobilePhone(phone, 'en-SG')
+
+		const foundUser = await getMongoRepository(UserEntity).findOne({
+			where: {
+				email,
+				verified: false
+			}
+		})
+
+		if (!foundUser) {
+			throw new NotFoundException('User not found.')
+		}
+
+		const token = await speakeasy.totp({
+			secret: SPEAKEASY_SECRET!,
+			encoding: 'base32'
+			// digits: SPEAKEASY_DIGITS!
+			// step: SPEAKEASY_STEP! // 30s
+			// window: 1 // pre 30s cur 30s nxt 30s
+		})
+
+		// const remaining = TOTP_STEP - Math.floor((+new Date() / 1000.0) % TOTP_STEP)
+
+		await sendMail(foundUser, token)
+
+		foundUser.phone = phone
+
+		await getMongoRepository(UserEntity).save(foundUser)
+
+		return true
+	}
+
+	async verify(verifyUserDto: VerifyUserDto) {
+		const { email, phone, otp } = verifyUserDto
+
+		const foundUser = await getMongoRepository(UserEntity).findOne({
+			where: {
+				email,
+				phone,
+				verified: false
+			}
+		})
+
+		if (!foundUser) {
+			throw new NotFoundException('User not found.')
+		}
+
+		// console.log(otp)
+
+		const verified = await speakeasy.totp.verify({
+			secret: SPEAKEASY_SECRET!,
+			encoding: 'base32',
+			token: otp,
+			// step: SPEAKEASY_STEP!, // 30s
+			window: 1
+		})
+
+		// console.log(verified)
+
+		if (verified) {
+			foundUser.verified = true
+
+			return await getMongoRepository(UserEntity).save(foundUser)
+		}
+
+		throw new ForbiddenException('Otp is incorrect.')
 	}
 }

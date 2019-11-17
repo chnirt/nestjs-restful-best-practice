@@ -32,7 +32,10 @@ export class AuthService {
 			access_token: this.jwtService.sign(payload, {
 				expiresIn
 			}),
-			expiresIn
+			expiresIn: '30d'
 		}
+
+		// const { _id, verified } = user
+		// return { _id, verified }
 	}
 }

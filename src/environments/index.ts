@@ -66,6 +66,11 @@ const CLOUD_NAME: string = process.env.CLOUD_NAME || 'xxx'
 const API_KEY: string = process.env.API_KEY || 'xxx'
 const API_SECRET: string = process.env.API_SECRET || 'xxx'
 
+// speakeasy
+const SPEAKEASY_SECRET = process.env.SPEAKEASY_SECRET || 'speakeasy-secret'
+const SPEAKEASY_DIGITS = +process.env.SPEAKEASY_DIGITS || 6
+const SPEAKEASY_STEP = +process.env.SPEAKEASY_STEP || 60
+
 // pubsub
 const NOTIFICATION_SUBSCRIPTION: string = 'newNotification'
 const USER_SUBSCRIPTION: string = 'newUser'
@@ -131,6 +136,9 @@ export {
 	CLOUD_NAME,
 	API_KEY,
 	API_SECRET,
+	SPEAKEASY_SECRET,
+	SPEAKEASY_DIGITS,
+	SPEAKEASY_STEP,
 	USER_SUBSCRIPTION,
 	NOTIFICATION_SUBSCRIPTION,
 	MESSAGES_SUBSCRIPTION,

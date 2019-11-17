@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
 			return result
 		} catch (err) {
-			throw new UnauthorizedException()
+			throw new UnauthorizedException('Email or password is incorrect.')
 		}
 	}
 }

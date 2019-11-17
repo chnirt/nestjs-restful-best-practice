@@ -46,6 +46,14 @@ export class UserEntity {
 	@Column()
 	avatar: string
 
+	@ApiModelProperty({ description: 'The phone of the User' })
+	@Column()
+	phone: string
+
+	@ApiModelProperty({ description: 'The verified of the User' })
+	@Column()
+	verified: boolean
+
 	@ApiModelProperty({ description: 'The createdAt of the User' })
 	@Column()
 	createdAt: number
@@ -60,6 +68,7 @@ export class UserEntity {
 			this.avatar =
 				this.avatar ||
 				'https://res.cloudinary.com/chnirt/image/upload/v1573662028/rest/2019-11-13T16:20:22.699Z.png'
+			this.verified = this.verified || false
 			this.createdAt = this.createdAt || +new Date()
 			this.updatedAt = +new Date()
 		}
