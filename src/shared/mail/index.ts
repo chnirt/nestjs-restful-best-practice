@@ -31,6 +31,9 @@ export const sendMail = async (
 		service: 'gmail',
 		port: 465,
 		secure: true,
+		tls: {
+			rejectUnauthorized: false
+		},
 		auth: {
 			user: MAIL_USER!,
 			pass: MAIL_PASS!
