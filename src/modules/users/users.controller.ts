@@ -53,6 +53,8 @@ import { OtpUserDto } from './dto/otp-user.dto'
 export class UsersController {
 	constructor(private readonly userService: UsersService) {}
 
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
 		title: 'Retrieve many Users'
 	})
@@ -71,6 +73,8 @@ export class UsersController {
 		return newUser
 	}
 
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
 		title: 'Retrieve one User'
 	})
@@ -79,6 +83,8 @@ export class UsersController {
 		return this.userService.findOne(id)
 	}
 
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
 		title: 'Update one User'
 	})
@@ -87,6 +93,8 @@ export class UsersController {
 		return this.userService.findOneAndUpdate(id, updateUserDto)
 	}
 
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
 		title: 'Replace one User'
 	})
@@ -95,6 +103,8 @@ export class UsersController {
 		return this.userService.findOneAndReplace(id, replaceUserDto)
 	}
 
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
 		title: 'Delete one User'
 	})
@@ -103,6 +113,8 @@ export class UsersController {
 		return this.userService.deleteOne(id)
 	}
 
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
 		title: 'Update one Avatar for current User'
 	})
