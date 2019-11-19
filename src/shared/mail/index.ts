@@ -29,8 +29,9 @@ export const sendMail = async (
 ): Promise<any> => {
 	const transporter = await nodemailer.createTransport({
 		service: 'gmail',
-		port: 465,
-		secure: true,
+		secure: false, // true
+		host: 'smtp.gmail.com',
+		port: 587, // 465
 		tls: {
 			rejectUnauthorized: false
 		},
