@@ -156,9 +156,9 @@ export class UsersService {
 
 		const token = await speakeasy.totp({
 			secret: SPEAKEASY_SECRET!,
-			encoding: 'base32'
+			encoding: 'base32',
 			// digits: SPEAKEASY_DIGITS!
-			// step: SPEAKEASY_STEP! // 30s
+			step: SPEAKEASY_STEP! // 30s
 			// window: 1 // pre 30s cur 30s nxt 30s
 		})
 
@@ -194,7 +194,7 @@ export class UsersService {
 			secret: SPEAKEASY_SECRET!,
 			encoding: 'base32',
 			token: otp,
-			// step: SPEAKEASY_STEP!, // 30s
+			step: SPEAKEASY_STEP!, // 30s
 			window: 1
 		})
 
