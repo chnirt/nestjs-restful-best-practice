@@ -1,6 +1,8 @@
 import * as nodemailer from 'nodemailer'
 import * as handlebars from 'handlebars'
 import * as fs from 'fs'
+import { google } from 'googleapis'
+
 import { UserEntity } from '../../modules/users/user.entity'
 
 import {
@@ -11,14 +13,23 @@ import {
 	MAIL_PASS
 } from '../../environments'
 
+const OAuth2 = google.auth.OAuth2;
+
 const USER = 'trinhchinchin@gmail.com'
 const CLIENT_ID =
 	'592071089720-5r7brh7kisl13s8ec0h6ig98f88nl9o7.apps.googleusercontent.com'
 const CLIENT_SECRET = 'hZoBMmq4A7TmYVJVIBmTLwCp'
-const REFRESH_TOKEN =
-	'1//04duGrmhSE95lCgYIARAAGAQSNwF-L9IriYmQZlkTH-O3THP_nfsJY0x1KtD4XlPjU7w5XJZwcazlW-GQMBjyVSQ87cO6Bw_VNXk'
-const ACCESS_TOKEN =
-	'ya29.Il-xB50PFUdV6mbU2s-4Y2skGxS02p9fhlQppBNScmGClLV2ABu8K2rL2jfpfdtQ9QzwddMVKO3XEbwa7SSqChdDJ3N4ItH2ofKgoy4kc5Ng_i3jszG-6lF5rBo-PWQFKg'
+const REFRESH_TOKEN = '1//04FMBffBo6WFrCgYIARAAGAQSNwF-L9Irr-1O3EjFZ2mUcc0q3zthUT91PIaRNA7NzKpCxZwg_jTMJfipI3ng55gGTSwNi_LX2jA'
+
+const oauth2Client = new OAuth2(
+	CLIENT_ID, CLIENT_SECRET,
+	'https://developers.google.com/oauthplayground' // Redirect URL
+);
+
+oauth2Client.setCredentials({
+	refresh_token: REFRESH_TOKEN
+});
+const accessToken = oauth2Client.getAccessToken()
 
 const auth = {
 	type: 'OAuth2',
@@ -26,8 +37,7 @@ const auth = {
 	clientId: CLIENT_ID,
 	clientSecret: CLIENT_SECRET,
 	refreshToken: REFRESH_TOKEN,
-	accessToken: ACCESS_TOKEN,
-	expires: +new Date() + 1000 * 60 * 60 * 24 * 365
+	accessToken
 }
 /**
  * Returns any by send email.
@@ -47,6 +57,9 @@ export const sendMail = async (
 ): Promise<any> => {
 	const transporter = await nodemailer.createTransport({
 		service: 'gmail',
+		host: 'smtp.gmail.com',
+		port: 465,
+		secure: true,
 		// secure: false, // true
 		// host: 'smtp.gmail.com',
 		// port: 587, // 465

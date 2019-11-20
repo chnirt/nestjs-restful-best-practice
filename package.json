@@ -47,6 +47,7 @@
 		"cloudinary": "1.16.0",
 		"dotenv": "^8.2.0",
 		"express-rate-limit": "^5.0.0",
+		"googleapis": "^45.0.0",
 		"handlebars": "^4.5.2",
 		"helmet": "^3.21.2",
 		"http": "^0.0.0",
