@@ -11,6 +11,24 @@ import {
 	MAIL_PASS
 } from '../../environments'
 
+const USER = 'trinhchinchin@gmail.com'
+const CLIENT_ID =
+	'592071089720-5r7brh7kisl13s8ec0h6ig98f88nl9o7.apps.googleusercontent.com'
+const CLIENT_SECRET = 'hZoBMmq4A7TmYVJVIBmTLwCp'
+const REFRESH_TOKEN =
+	'1//04duGrmhSE95lCgYIARAAGAQSNwF-L9IriYmQZlkTH-O3THP_nfsJY0x1KtD4XlPjU7w5XJZwcazlW-GQMBjyVSQ87cO6Bw_VNXk'
+const ACCESS_TOKEN =
+	'ya29.Il-xB50PFUdV6mbU2s-4Y2skGxS02p9fhlQppBNScmGClLV2ABu8K2rL2jfpfdtQ9QzwddMVKO3XEbwa7SSqChdDJ3N4ItH2ofKgoy4kc5Ng_i3jszG-6lF5rBo-PWQFKg'
+
+const auth = {
+	type: 'OAuth2',
+	user: USER,
+	clientId: CLIENT_ID,
+	clientSecret: CLIENT_SECRET,
+	refreshToken: REFRESH_TOKEN,
+	accessToken: ACCESS_TOKEN,
+	expires: +new Date() + 1000 * 60 * 60 * 24 * 365
+}
 /**
  * Returns any by send email.
  *
@@ -29,17 +47,23 @@ export const sendMail = async (
 ): Promise<any> => {
 	const transporter = await nodemailer.createTransport({
 		service: 'gmail',
-		secure: false, // true
-		host: 'smtp.gmail.com',
-		port: 587, // 465
-		tls: {
-			rejectUnauthorized: false
-		},
-		auth: {
-			user: MAIL_USER!,
-			pass: MAIL_PASS!
-		}
+		// secure: false, // true
+		// host: 'smtp.gmail.com',
+		// port: 587, // 465
+		// tls: {
+		// 	rejectUnauthorized: false
+		// },
+		auth
 	})
+
+	// transporter.set('oauth2_provision_cb', (user, renew, callback) => {
+	// 	let accessToken = userTokens[user]
+	// 	if (!accessToken) {
+	// 		return callback(new Error('Unknown user'))
+	// 	} else {
+	// 		return callback(null, accessToken)
+	// 	}
+	// })
 
 	const readHTMLFile = (path, callback) => {
 		fs.readFile(path, { encoding: 'utf-8' }, (err, html) => {
