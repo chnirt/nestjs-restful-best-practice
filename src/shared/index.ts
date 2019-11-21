@@ -1,2 +1,1 @@
-export * from './mail';
-export * from './upload';
+export * from './upload'
