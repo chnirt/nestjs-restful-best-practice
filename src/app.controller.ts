@@ -37,28 +37,6 @@ export class AppController {
 		private readonly authService: AuthService
 	) {}
 
-	// @Post('totp-generate')
-	// generateTotpToken() {
-	// 	return this.appService.generateTotpToken()
-	// }
-	// @Post('totp-validate/:token')
-	// verifyTotp(@Param('token') token: string) {
-	// 	return this.appService.verifyTotp(token)
-	// }
-
-	@Post('totp-secret')
-	getTotpSecret() {
-		return this.appService.getTotpSecret()
-	}
-	@Post('topt-generate/:secret')
-	generateTotpSecret(@Param('secret') secret: string) {
-		return this.appService.generateTotpSecret(secret)
-	}
-	@Post('topt-validate')
-	verifyTotp(@Body() totp: TotpDto) {
-		return this.appService.verifyTotp(totp)
-	}
-
 	@Get()
 	getHello(): string {
 		return this.appService.getHello()
