@@ -37,7 +37,7 @@ const auth = {
 	clientId: CLIENT_ID,
 	clientSecret: CLIENT_SECRET,
 	refreshToken: REFRESH_TOKEN,
-	accessToken
+	// accessToken
 }
 /**
  * Returns any by send email.
