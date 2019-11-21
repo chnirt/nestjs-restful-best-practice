@@ -162,15 +162,18 @@ export class UsersService {
 			// window: 1 // pre 30s cur 30s nxt 30s
 		})
 
-		// const remaining = TOTP_STEP - Math.floor((+new Date() / 1000.0) % TOTP_STEP)
+		const remaining = SPEAKEASY_STEP - Math.floor((+new Date() / 1000.0) % SPEAKEASY_STEP)
 
-		await sendMail(foundUser, token)
+		// await sendMail(foundUser, token)
 
 		foundUser.phone = phone
 
 		await getMongoRepository(UserEntity).save(foundUser)
 
-		return true
+		return {
+			otp: token,
+			remaining
+		}
 	}
 
 	async verify(verifyUserDto: VerifyUserDto) {
