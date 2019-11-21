@@ -13,32 +13,20 @@ import {
 	MAIL_PASS
 } from '../../environments'
 
-const OAuth2 = google.auth.OAuth2;
+const OAuth2 = google.auth.OAuth2
 
 const USER = 'trinhchinchin@gmail.com'
 const CLIENT_ID =
 	'592071089720-5r7brh7kisl13s8ec0h6ig98f88nl9o7.apps.googleusercontent.com'
 const CLIENT_SECRET = 'hZoBMmq4A7TmYVJVIBmTLwCp'
-const REFRESH_TOKEN = '1//04FMBffBo6WFrCgYIARAAGAQSNwF-L9Irr-1O3EjFZ2mUcc0q3zthUT91PIaRNA7NzKpCxZwg_jTMJfipI3ng55gGTSwNi_LX2jA'
+const REDIRECT_URL = 'https://developers.google.com/oauthplayground'
+const CODE =
+	'4/tQHYbPfbWwG9JzmiIp892v_U7Gwx535I_WIdXAm5zXXF80Ibh4N6LzmEpn7I1WrH_U9rlGLO_ESPV1fIczE0iXI'
+const REFRESH_TOKEN =
+	'1//04fRMZFNCobYfCgYIARAAGAQSNwF-L9Irh6ampzDOOK2Fhqe3MFOsPVKRDFcROnSR39VWse_A5wbcy8Bcw372f7Hd9911wuakKlo'
+const ACCESS_TOKEN =
+	'ya29.Il-xBybWOganS0agBEKmtDeUfoz4upv59_1-aFL_WhqyrHYVRwwVAirlfkYu_Mxa6FpjwzJi0vVHEDcJDzh0klnCnzY6u-ZPpr6k5mvw1D_Jgdi5aYqWV1KbBuEnhNc7MQ'
 
-const oauth2Client = new OAuth2(
-	CLIENT_ID, CLIENT_SECRET,
-	'https://developers.google.com/oauthplayground' // Redirect URL
-);
-
-oauth2Client.setCredentials({
-	refresh_token: REFRESH_TOKEN
-});
-const accessToken = oauth2Client.getAccessToken()
-
-const auth = {
-	type: 'OAuth2',
-	user: USER,
-	clientId: CLIENT_ID,
-	clientSecret: CLIENT_SECRET,
-	refreshToken: REFRESH_TOKEN,
-	accessToken
-}
 /**
  * Returns any by send email.
  *
@@ -55,28 +43,49 @@ export const sendMail = async (
 	user: UserEntity,
 	token: string
 ): Promise<any> => {
-	const transporter = await nodemailer.createTransport({
-		service: 'gmail',
-		host: 'smtp.gmail.com',
-		port: 465,
-		secure: true,
-		// secure: false, // true
-		// host: 'smtp.gmail.com',
-		// port: 587, // 465
-		// tls: {
-		// 	rejectUnauthorized: false
-		// },
-		auth
+	const oauth2Client = new google.auth.OAuth2(
+		CLIENT_ID,
+		CLIENT_SECRET,
+		REDIRECT_URL
+	)
+
+	console.log('12121', oauth2Client)
+
+	const GMAIL_SCOPES = ['https://mail.google.com/']
+
+	const url = oauth2Client.generateAuthUrl({
+		access_type: 'offline',
+		scope: GMAIL_SCOPES
 	})
 
-	// transporter.set('oauth2_provision_cb', (user, renew, callback) => {
-	// 	let accessToken = userTokens[user]
-	// 	if (!accessToken) {
-	// 		return callback(new Error('Unknown user'))
-	// 	} else {
-	// 		return callback(null, accessToken)
-	// 	}
-	// })
+	const getToken = async () => {
+		const { tokens } = await oauth2Client.getToken(CODE)
+		console.info(tokens)
+	}
+
+	console.log(getToken())
+
+	oauth2Client.setCredentials({
+		refresh_token: REFRESH_TOKEN
+	})
+
+	const accessToken = oauth2Client.getAccessToken()
+
+	// console.log(accessToken)
+
+	const auth = {
+		type: 'OAuth2',
+		user: USER,
+		clientId: CLIENT_ID,
+		clientSecret: CLIENT_SECRET,
+		refreshToken: REFRESH_TOKEN,
+		accessToken
+	}
+
+	const transporter = nodemailer.createTransport({
+		service: 'gmail',
+		auth
+	})
 
 	const readHTMLFile = (path, callback) => {
 		fs.readFile(path, { encoding: 'utf-8' }, (err, html) => {

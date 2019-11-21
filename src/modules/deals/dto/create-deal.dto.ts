@@ -1,7 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsEnum, IsOptional } from 'class-validator'
 
-import { ItemType, PaymentType, DealType } from '../enum/deal.enum'
+import { ItemType, ServiceType, PaymentType, DealType } from '../enum/deal.enum'
 import { Position } from '../interface/potisition.interface'
 
 export class CreateDealDto {
@@ -15,6 +15,22 @@ export class CreateDealDto {
 	readonly dealType: DealType
 
 	@ApiModelProperty({
+		enum: [
+			'Delivery',
+			'Courier',
+			'Purchase',
+			'Queue',
+			'Overseas-Purchase',
+			'Others'
+		],
+		example: 'Delivery',
+		description: 'The service type of the Deal'
+	})
+	@IsEnum(ServiceType)
+	@IsNotEmpty()
+	readonly serviceType: ServiceType
+
+	@ApiModelProperty({
 		enum: ['Meal', 'Drinks', 'Desserts', 'Snacks'],
 		example: 'Meal',
 		description: 'The item type of the Deal'
@@ -23,15 +39,27 @@ export class CreateDealDto {
 	@IsNotEmpty()
 	readonly itemType: ItemType
 
-	@ApiModelProperty({ example: 'Nui xào bò lúc lắc', required: false, description: 'The items of the Deal' })
+	@ApiModelProperty({
+		example: 'Nui xào bò lúc lắc',
+		required: false,
+		description: 'The items of the Deal'
+	})
 	@IsOptional()
 	readonly items: string
 
-	@ApiModelProperty({ example: 'Noodle beef cube', required: false, description: 'The description of the Deal' })
+	@ApiModelProperty({
+		example: 'Noodle beef cube',
+		required: false,
+		description: 'The description of the Deal'
+	})
 	@IsOptional()
 	readonly description: string
 
-	@ApiModelProperty({ example: 'Tâm Ký', required: false, description: 'The shop name of the Deal' })
+	@ApiModelProperty({
+		example: 'Tâm Ký',
+		required: false,
+		description: 'The shop name of the Deal'
+	})
 	@IsOptional()
 	readonly shopName: string
 
@@ -43,7 +71,8 @@ export class CreateDealDto {
 		example: {
 			latitude: '10.780230999999999',
 			longitude: '106.6645121'
-		}, description: 'The location of the Deal'
+		},
+		description: 'The location of the Deal'
 	})
 	@IsNotEmpty()
 	readonly location: Position
@@ -56,16 +85,24 @@ export class CreateDealDto {
 		example: {
 			latitude: '10.780230999999999',
 			longitude: '106.6645121'
-		}, description: 'The destination of the Deal'
+		},
+		description: 'The destination of the Deal'
 	})
 	@IsNotEmpty() // I have no preference auto get location device
 	readonly destination: Position
 
-	@ApiModelProperty({ default: 60 * 60 * 30, example: 60 * 60 * 30, description: 'The duration for the expiredAt of the Deal' })
+	@ApiModelProperty({
+		default: 60 * 60 * 30,
+		example: 60 * 60 * 30,
+		description: 'The duration for the expiredAt of the Deal'
+	})
 	@IsNotEmpty() // 30m 1h 1h30 2h
 	readonly duration: number
 
-	@ApiModelProperty({ enum: ['Chewpay', 'Cod'], description: 'The payment of the Deal' })
+	@ApiModelProperty({
+		enum: ['Chewpay', 'Cod'],
+		description: 'The payment of the Deal'
+	})
 	@IsEnum(PaymentType)
 	@IsNotEmpty()
 	readonly payment: PaymentType

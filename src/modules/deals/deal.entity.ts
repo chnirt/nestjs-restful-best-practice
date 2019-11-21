@@ -3,7 +3,7 @@ import { uuidv4 } from '../../utils'
 // import { Exclude, plainToClass } from 'class-transformer'
 import { ApiModelProperty } from '@nestjs/swagger'
 
-import { ItemType, PaymentType } from './enum/deal.enum'
+import { ItemType, ServiceType, PaymentType } from './enum/deal.enum'
 import { Position } from './interface/potisition.interface'
 import { UserEntity } from '../users/user.entity'
 
@@ -17,6 +17,10 @@ export class DealEntity {
 	@ApiModelProperty({ description: 'The _id of the Deal' })
 	@ObjectIdColumn()
 	_id: string
+
+	@ApiModelProperty({ description: 'The service type of the Deal' })
+	@ObjectIdColumn()
+	serviceType: ServiceType
 
 	@ApiModelProperty({ description: 'The item type of the Deal' })
 	@Column()
