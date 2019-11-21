@@ -13,32 +13,14 @@ import {
 	MAIL_PASS
 } from '../../environments'
 
-const OAuth2 = google.auth.OAuth2;
-
 const USER = 'trinhchinchin@gmail.com'
-const CLIENT_ID =
+const GMAIL_CLIENT_ID =
 	'592071089720-5r7brh7kisl13s8ec0h6ig98f88nl9o7.apps.googleusercontent.com'
-const CLIENT_SECRET = 'hZoBMmq4A7TmYVJVIBmTLwCp'
-const REFRESH_TOKEN = '1//04FMBffBo6WFrCgYIARAAGAQSNwF-L9Irr-1O3EjFZ2mUcc0q3zthUT91PIaRNA7NzKpCxZwg_jTMJfipI3ng55gGTSwNi_LX2jA'
+const GMAIL_CLIENT_SECRET = 'hZoBMmq4A7TmYVJVIBmTLwCp'
+const GMAIL_CODE = '4/tQEvQrTEdStKPurIl2HIZcRoAv_XHiJkt2CH_K2s6fuakKwT4qK92wQJTr12PqgXm-EqTJYChjqo9Q2S10WoPP8'
+const GMAIL_REDIRECT_URL = 'https://developers.google.com/oauthplayground'
+const REFRESH_TOKEN = '1//044Zs3ueZIzy3CgYIARAAGAQSNwF-L9Ir6uYJ9Q0_B5-ATAfDoLLep2naVBaTup6IrNdpKDH3pfMF4L5QBvoPagZRM6rgxyuQaZI'
 
-const oauth2Client = new OAuth2(
-	CLIENT_ID, CLIENT_SECRET,
-	'https://developers.google.com/oauthplayground' // Redirect URL
-);
-
-oauth2Client.setCredentials({
-	refresh_token: REFRESH_TOKEN
-});
-const accessToken = oauth2Client.getAccessToken()
-
-const auth = {
-	type: 'OAuth2',
-	user: USER,
-	clientId: CLIENT_ID,
-	clientSecret: CLIENT_SECRET,
-	refreshToken: REFRESH_TOKEN,
-	// accessToken
-}
 /**
  * Returns any by send email.
  *
@@ -55,17 +37,65 @@ export const sendMail = async (
 	user: UserEntity,
 	token: string
 ): Promise<any> => {
+	const oauth2Client = new google.auth.OAuth2(
+		GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REDIRECT_URL
+	);
+
+	// const GMAIL_SCOPES = [
+	// 	'https://mail.google.com/',
+	// 	'https://www.googleapis.com/auth/gmail.modify',
+	// 	'https://www.googleapis.com/auth/gmail.compose',
+	// 	'https://www.googleapis.com/auth/gmail.send',
+	// ];
+
+	// const url = oauth2Client.generateAuthUrl({
+	// 	access_type: 'offline',
+	// 	scope: GMAIL_SCOPES,
+	// });
+
+	// console.log(url)
+
+	oauth2Client.getToken(GMAIL_CODE, function(err, tokens) {
+		if (!err) {
+			oauth2Client.setCredentials(tokens);
+			console.log(tokens)
+		}
+
+	});
+	// const { tokens } = await oauth2Client.getToken(CODE)
+	// oauth2Client.setCredentials(tokens);
+
+	// oauth2Client.setCredentials({
+	// 	refresh_token: REFRESH_TOKEN
+	// });
+	// const accessToken = await oauth2Client.getAccessToken()
+	// oauth2Client.setCredentials({
+	// 	refresh_token: REFRESH_TOKEN
+	// });
+
+	// oauth2Client.on('tokens', (tokens) => {
+	// 	if (tokens.refresh_token) {
+	// 		// store the refresh_token in my database!
+	// 		console.log(tokens.refresh_token);
+	// 	}
+	// 	console.log(tokens.access_token);
+	// });
+
+	// console.log(accessToken)
+
+	const auth = {
+		type: 'OAuth2',
+		user: USER,
+		clientId: GMAIL_CLIENT_ID,
+		clientSecret: GMAIL_CLIENT_SECRET,
+		refreshToken: REFRESH_TOKEN,
+		accessToken: 'ya29.Il-xB1V5V3crDFBRmXV3oSAedHI8sp5KHg27Efokbs5NnTyt0BKA8SRfdibD2-HxS0FaC6W5xecWYcSfsEruEawTwsNzj3W-KoIzqaW-88Q4ukKZWFMEJop3x8CUViBUCA'
+	}
+
 	const transporter = await nodemailer.createTransport({
-		service: 'gmail',
 		host: 'smtp.gmail.com',
 		port: 465,
 		secure: true,
-		// secure: false, // true
-		// host: 'smtp.gmail.com',
-		// port: 587, // 465
-		// tls: {
-		// 	rejectUnauthorized: false
-		// },
 		auth
 	})
 
