@@ -39,7 +39,15 @@ export class DealsService {
 					}
 				},
 				{
-					$project: { 'createdBy.password': 0 }
+					$project: {
+						'createdBy.email': 0,
+						'createdBy.password': 0,
+						'createdBy.referralCode': 0,
+						'createdBy.verified': 0,
+						'createdBy.createdAt': 0,
+						'createdBy.updatedAt': 0,
+						'createdBy.phone': 0
+					}
 				}
 			])
 			.toArray()
