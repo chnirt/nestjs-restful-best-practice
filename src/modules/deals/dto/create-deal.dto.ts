@@ -31,7 +31,7 @@ export class CreateDealDto {
 	readonly serviceType: ServiceType
 
 	@ApiModelProperty({
-		enum: ['Meal', 'Drinks', 'Desserts', 'Snacks'],
+		enum: ['Meal', 'Drinks', 'Desserts', 'Snacks', 'Anything'],
 		example: 'Meal',
 		description: 'The item type of the Deal'
 	})
@@ -40,6 +40,7 @@ export class CreateDealDto {
 	readonly itemType: ItemType
 
 	@ApiModelProperty({
+		default: 'Nui xào bò lúc lắc',
 		example: 'Nui xào bò lúc lắc',
 		required: false,
 		description: 'The items of the Deal'
@@ -48,6 +49,7 @@ export class CreateDealDto {
 	readonly items: string
 
 	@ApiModelProperty({
+		default: 'Noodle beef cube',
 		example: 'Noodle beef cube',
 		required: false,
 		description: 'The description of the Deal'
@@ -56,6 +58,7 @@ export class CreateDealDto {
 	readonly description: string
 
 	@ApiModelProperty({
+		default: 'Tâm Ký',
 		example: 'Tâm Ký',
 		required: false,
 		description: 'The shop name of the Deal'

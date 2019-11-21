@@ -13,7 +13,7 @@ import { hashPassword } from '../../utils'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { ReplaceUserDto } from './dto/replace-user.dto'
 
-import { uploadFile, sendMail } from '../../shared'
+import { uploadFile } from '../../shared'
 
 import {
 	SPEAKEASY_SECRET,
@@ -162,9 +162,8 @@ export class UsersService {
 			// window: 1 // pre 30s cur 30s nxt 30s
 		})
 
-		const remaining = SPEAKEASY_STEP - Math.floor((+new Date() / 1000.0) % SPEAKEASY_STEP)
-
-		// await sendMail(foundUser, token)
+		const remaining =
+			SPEAKEASY_STEP - Math.floor((+new Date() / 1000.0) % SPEAKEASY_STEP)
 
 		foundUser.phone = phone
 
