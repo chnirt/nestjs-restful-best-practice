@@ -8,6 +8,7 @@ import { getMongoRepository } from 'typeorm'
 import { CreateDealDto } from './dto/create-deal.dto'
 import { DealEntity } from './deal.entity'
 import { uploadFile } from '../../shared'
+import { ServiceType, ItemType } from './enum/deal.enum'
 
 export type Deal = any
 
@@ -67,27 +68,66 @@ export class DealsService {
 		// console.log(createDealDto, file, req.user._id)
 		const { user } = req
 		const { _id } = user
+		const {
+			dealType,
+			serviceType,
+			itemType,
+			location,
+			duration,
+			payment
+		} = createDealDto
+
+		let convertCreateDealDto
+		let newDeal
+
+		if (
+			createDealDto.serviceType === ServiceType.FoodDelivery &&
+			createDealDto.itemType === ItemType.None
+		) {
+			throw new ForbiddenException('Service type and Item type is incorrect.')
+		}
 
 		if (file && file.size > 1024 * 1024 * 2) {
 			throw new ForbiddenException('The import file is too large to upload')
 		}
 
-		const thumbnail = await uploadFile(file)
+		if (createDealDto.itemType === ItemType.Anything) {
+			convertCreateDealDto = {
+				dealType,
+				serviceType,
+				itemType,
+				location,
+				duration,
+				payment
+			}
 
-		const convertCreateDealDto = {
-			...createDealDto,
-			thumbnail,
-			expiredAt: +new Date() + 1000 * createDealDto.duration,
-			createdBy: _id
+			newDeal = await getMongoRepository(DealEntity).save(
+				new DealEntity(convertCreateDealDto)
+			)
+
+			return newDeal
+		} else {
+			const thumbnail = await uploadFile(file)
+
+			convertCreateDealDto = {
+				...createDealDto,
+				thumbnail,
+				expiredAt: +new Date() + 1000 * createDealDto.duration,
+				createdBy: _id
+			}
+
+			delete convertCreateDealDto.duration
+
+			if (createDealDto.serviceType !== ServiceType.FoodDelivery) {
+				delete convertCreateDealDto.itemType
+			}
+
+			newDeal = await getMongoRepository(DealEntity).save(
+				new DealEntity(convertCreateDealDto)
+			)
+
+			return newDeal
 		}
-
-		delete convertCreateDealDto.duration
-
-		const newDeal = await getMongoRepository(DealEntity).save(
-			new DealEntity(convertCreateDealDto)
-		)
-
-		return newDeal
 	}
 
 	async update() {

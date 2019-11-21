@@ -26,8 +26,8 @@ import { CreateDealDto } from './dto/create-deal.dto'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { AuthGuard } from '@nestjs/passport'
 
-@ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'))
+// @ApiBearerAuth()
+// @UseGuards(AuthGuard('jwt'))
 @ApiUseTags('deals')
 @Controller('deals')
 export class DealsController {

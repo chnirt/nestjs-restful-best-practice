@@ -16,11 +16,11 @@ export class CreateDealDto {
 
 	@ApiModelProperty({
 		enum: [
-			'Delivery',
-			'Courier',
-			'Purchase',
+			'FoodDelivery',
+			'Pickup',
+			'PharmacyPurchase',
 			'Queue',
-			'Overseas-Purchase',
+			'OverseasPurchase',
 			'Others'
 		],
 		example: 'Delivery',
@@ -31,7 +31,7 @@ export class CreateDealDto {
 	readonly serviceType: ServiceType
 
 	@ApiModelProperty({
-		enum: ['Meal', 'Drinks', 'Desserts', 'Snacks', 'Anything'],
+		enum: ['None', 'Meal', 'Drinks', 'Desserts', 'Snacks', 'Anything'],
 		example: 'Meal',
 		description: 'The item type of the Deal'
 	})

@@ -4,15 +4,16 @@ export enum DealType {
 }
 
 export enum ServiceType {
-	Delivery = 'Delivery',
-	Courier = 'Courier',
-	Purchase = 'Purchase',
+	FoodDelivery = 'FoodDelivery',
+	Pickup = 'Pickup',
+	PharmacyPurchase = 'PharmacyPurchase',
 	Queue = 'Queue',
 	OverseasPurchase = 'OverseasPurchase',
 	Others = 'Others'
 }
 
 export enum ItemType {
+	None = 'None',
 	Meal = 'Meal',
 	Drinks = 'Drinks',
 	Desserts = 'Desserts',
