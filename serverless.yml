@@ -1,0 +1,30 @@
+service:
+  name: nest-serverless-framework-demo
+
+plugins:
+  - '@hewmen/serverless-plugin-typescript'
+  - serverless-plugin-optimize
+  - serverless-offline
+  # - serverless-plugin-warmup
+
+# custom:
+#   # Enable warmup on all functions (only for production and staging)
+#   warmup:
+#       enabled: true
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+# package:
+#   individually: true
+#   include:
+#     - dist/photo/photo.entity.js
+
+functions:
+  main: # The name of the lambda function
+    handler: src/lambda.handler # The module 'handler' is exported in the file 'src/lambda'
+    events:
+      - http:
+          method: any
+          path: /{any+}
