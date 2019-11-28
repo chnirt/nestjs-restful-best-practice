@@ -69,6 +69,11 @@ export class AppController {
 		return req.user
 	}
 
+	@ApiResponse({
+		status: 201,
+		description: 'The record has been successfully created.',
+		type: String
+	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@Post('upload')

@@ -17,6 +17,7 @@ import { STATIC } from './environments'
 import { DealsModule } from './modules/deals/deals.module'
 import { BiddersModule } from './modules/bidders/bidders.module'
 import { AddressesModule } from './modules/addresses/addresses.module';
+import { BannersModule } from './modules/banners/banners.module';
 
 @Module({
 	imports: [
@@ -40,7 +41,8 @@ import { AddressesModule } from './modules/addresses/addresses.module';
 		EventsModule,
 		DealsModule,
 		BiddersModule,
-		AddressesModule
+		AddressesModule,
+		BannersModule
 	],
 	controllers: [AppController],
 	providers: [AppService, EventsGateway]

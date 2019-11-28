@@ -7,16 +7,17 @@ import {
 	Get,
 	Query
 } from '@nestjs/common'
-import { ApiOperation, ApiBearerAuth, ApiImplicitQuery } from '@nestjs/swagger'
+import { ApiOperation, ApiBearerAuth, ApiImplicitQuery, ApiUseTags } from '@nestjs/swagger'
 import { CreateAddressDto } from './dto/create-address.dto'
 import { AddressesService } from './addresses.service'
 import { AuthGuard } from '@nestjs/passport'
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
+@ApiUseTags('addresses')
 @Controller('addresses')
 export class AddressesController {
-	constructor(private readonly addressesService: AddressesService) {}
+	constructor(private readonly addressesService: AddressesService) { }
 
 	@ApiOperation({
 		title: 'Retrieve many Addresses'
