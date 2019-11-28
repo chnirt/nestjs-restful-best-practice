@@ -44,7 +44,7 @@ export class UsersService {
 			})
 		)
 
-		return newUser
+		return newUser && true
 	}
 
 	async findAll(): Promise<User[] | undefined> {

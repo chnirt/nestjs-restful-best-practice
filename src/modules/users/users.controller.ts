@@ -61,8 +61,8 @@ export class UsersController {
 
 	@ApiResponse({
 		status: 201,
-		description: 'The record has been successfully created.',
-		type: UserEntity
+		description: 'The record has been successfully created',
+		type: Boolean
 	})
 	@ApiOperation({
 		title: 'Create one User 👻'

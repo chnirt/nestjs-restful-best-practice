@@ -34,7 +34,7 @@ export class AddressesService {
 			const foundAddress = await getMongoRepository(AddressEntity).findOne({ addressType, createdBy: _id })
 
 			if (foundAddress) {
-				throw new ForbiddenException(`Address at ${addressType} already published`)
+				throw new ForbiddenException(`Address at ${addressType} already existed`)
 			}
 		}
 

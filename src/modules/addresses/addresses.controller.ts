@@ -51,8 +51,8 @@ export class AddressesController {
 	}
 
 	@ApiResponse({
-		status: 200,
-		description: 'The found record is executed',
+		status: 201,
+		description: 'The record has been successfully created',
 		type: Boolean
 	})
 	@ApiOperation({
