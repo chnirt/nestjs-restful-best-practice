@@ -33,26 +33,21 @@ import { ReplaceUserDto } from './dto/replace-user.dto'
 import { VerifyUserDto } from './dto/verify-user.dto'
 import { ACCESS_TOKEN_SECRET } from '../../environments'
 import { OtpUserDto } from './dto/otp-user.dto'
+import { ErrorResponseDto } from './dto/error-response.dto'
 
-// @ApiBearerAuth()
-// @UseGuards(AuthGuard('jwt'))
-@ApiResponse({
-	status: 200,
-	description: 'The found record',
-	type: [UserEntity]
-})
-@ApiResponse({
-	status: 201,
-	description: 'The record has been successfully created.',
-	type: UserEntity
-})
-@ApiResponse({ status: 403, description: 'Forbidden.' })
+@ApiResponse({ status: 401, description: 'Unauthorized.', type: ErrorResponseDto })
+@ApiResponse({ status: 403, description: 'Forbidden.', type: ErrorResponseDto })
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiUseTags('users')
 @Controller('users')
 export class UsersController {
-	constructor(private readonly userService: UsersService) {}
+	constructor(private readonly userService: UsersService) { }
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found records',
+		type: [UserEntity]
+	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
@@ -63,6 +58,11 @@ export class UsersController {
 		return this.userService.findAll()
 	}
 
+	@ApiResponse({
+		status: 201,
+		description: 'The record has been successfully created.',
+		type: UserEntity
+	})
 	@ApiOperation({
 		title: 'Create one User'
 	})
@@ -73,6 +73,11 @@ export class UsersController {
 		return newUser
 	}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found record',
+		type: UserEntity
+	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
@@ -103,6 +108,11 @@ export class UsersController {
 		return this.userService.findOneAndReplace(id, replaceUserDto)
 	}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found record is executed',
+		type: Boolean
+	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
@@ -113,6 +123,11 @@ export class UsersController {
 		return this.userService.deleteOne(id)
 	}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found record is executed',
+		type: Boolean
+	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
@@ -141,6 +156,11 @@ export class UsersController {
 		return this.userService.otp(otpUserDto)
 	}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found record is executed',
+		type: Boolean
+	})
 	@ApiOperation({
 		title: 'Verify one User'
 	})

@@ -18,7 +18,8 @@ import {
 	ApiImplicitFile,
 	ApiImplicitBody,
 	ApiUseTags,
-	ApiOperation
+	ApiOperation,
+	ApiResponse
 } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { AppService } from './app.service'
@@ -26,8 +27,11 @@ import { AuthService } from './auth/auth.service'
 import { LoginUserDto } from './modules/users/dto/login-user.dto'
 import { STATIC, SSL } from './environments'
 import { uploadFile } from './shared/upload'
-import { TotpDto } from './modules/users/dto/totp.dto'
+import { LoginResponseDto } from './modules/users/dto/login-response.dto'
+import { ErrorResponseDto } from './modules/users/dto/error-response.dto'
 
+@ApiResponse({ status: 401, description: 'Unauthorized.', type: ErrorResponseDto })
+@ApiResponse({ status: 403, description: 'Forbidden.', type: ErrorResponseDto })
 @ApiUseTags('basic')
 @Controller()
 @UseInterceptors(CacheInterceptor)
@@ -35,12 +39,18 @@ export class AppController {
 	constructor(
 		private readonly appService: AppService,
 		private readonly authService: AuthService
-	) {}
+	) { }
 
 	@Get()
 	getHello(): string {
 		return this.appService.getHello()
 	}
+
+	@ApiResponse({
+		status: 200,
+		description: 'The found record',
+		type: LoginResponseDto
+	})
 
 	@UseGuards(AuthGuard('local'))
 	@ApiOperation({
@@ -59,8 +69,8 @@ export class AppController {
 		return req.user
 	}
 
-	// @ApiBearerAuth()
-	// @UseGuards(AuthGuard('jwt'))
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
 	@Post('upload')
 	@ApiConsumes('multipart/form-data')
 	@ApiImplicitFile({
@@ -107,6 +117,8 @@ export class AppController {
 		})
 	}
 
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
 		title: 'Verify one Ssl',
 		deprecated: true

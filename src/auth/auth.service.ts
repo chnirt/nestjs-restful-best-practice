@@ -9,7 +9,7 @@ export class AuthService {
 	constructor(
 		private readonly usersService: UsersService,
 		private readonly jwtService: JwtService
-	) {}
+	) { }
 
 	async validateUser(username: string, pass: string): Promise<UserEntity> {
 		const user = await this.usersService.findOneWithEmail(username)
@@ -29,7 +29,7 @@ export class AuthService {
 		const expiresIn = 60 * 60 * 24 * 30
 
 		return {
-			access_token: this.jwtService.sign(payload, {
+			accessToken: this.jwtService.sign(payload, {
 				expiresIn
 			}),
 			expiresIn: '30d'

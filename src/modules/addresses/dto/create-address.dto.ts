@@ -1,7 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsEnum, IsOptional } from 'class-validator'
 
-import { AddressType } from '../enum/Address.enum'
+import { AddressType } from '../enum/address.enum'
 import { Position } from '../../deals/interface/potisition.interface'
 
 export class CreateAddressDto {

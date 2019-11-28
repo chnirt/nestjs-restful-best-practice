@@ -21,17 +21,14 @@ import {
 	ApiBearerAuth
 } from '@nestjs/swagger'
 
-import { DealEntity } from './deal.entity'
 import { CreateDealDto } from './dto/create-deal.dto'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { AuthGuard } from '@nestjs/passport'
 
-@ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'))
 @ApiUseTags('deals')
 @Controller('deals')
 export class DealsController {
-	constructor(private readonly dealsService: DealsService) {}
+	constructor(private readonly dealsService: DealsService) { }
 
 	@ApiOperation({
 		title: 'Retrieve many Deals'
@@ -63,6 +60,8 @@ export class DealsController {
 		return this.dealsService.findOne(id)
 	}
 
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
 		title: 'Create one Deal'
 	})
