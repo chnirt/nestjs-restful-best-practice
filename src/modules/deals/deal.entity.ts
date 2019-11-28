@@ -18,15 +18,15 @@ export class DealEntity {
 	@ObjectIdColumn()
 	_id: string
 
-	@ApiModelProperty({ description: 'The deal type of the Deal' })
+	@ApiModelProperty({ description: 'The dealType of the Deal' })
 	@ObjectIdColumn()
 	dealType: DealType
 
-	@ApiModelProperty({ description: 'The service type of the Deal' })
+	@ApiModelProperty({ description: 'The serviceType of the Deal' })
 	@ObjectIdColumn()
 	serviceType: ServiceType
 
-	@ApiModelProperty({ description: 'The item type of the Deal' })
+	@ApiModelProperty({ description: 'The itemType of the Deal' })
 	@Column()
 	itemType: ItemType
 
@@ -38,7 +38,7 @@ export class DealEntity {
 	@Column()
 	description: string
 
-	@ApiModelProperty({ description: 'The shop name of the Deal' })
+	@ApiModelProperty({ description: 'The shopName of the Deal' })
 	@Column()
 	shopName: string
 

@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core'
-import { Logger } from '@nestjs/common'
+import { Logger, InternalServerErrorException } from '@nestjs/common'
 import chalk from 'chalk'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import * as bodyParser from 'body-parser'
@@ -107,21 +107,22 @@ async function bootstrap() {
 
 		NODE_ENV !== 'production'
 			? Logger.log(
-				`🚀  Server ready at https://${DOMAIN!}:${chalk
-					.hex('#87e8de')
-					.bold(`${PORT!}`)}`,
-				'Bootstrap'
-			)
+					`🚀  Server ready at https://${DOMAIN!}:${chalk
+						.hex('#87e8de')
+						.bold(`${PORT!}`)}`,
+					'Bootstrap'
+			  )
 			: Logger.log(
-				`🚀  Server is listening on port ${chalk
-					.hex('#87e8de')
-					.bold(`${PORT!}`)}`,
-				'Bootstrap'
-			)
+					`🚀  Server is listening on port ${chalk
+						.hex('#87e8de')
+						.bold(`${PORT!}`)}`,
+					'Bootstrap'
+			  )
 	} catch (error) {
 		// logger.error(error)
 		Logger.error(`❌  Error starting server, ${error}`, '', 'Bootstrap', false)
 		process.exit()
+		throw new InternalServerErrorException(error)
 	}
 }
 bootstrap().catch(e => {

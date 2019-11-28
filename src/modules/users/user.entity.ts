@@ -33,6 +33,10 @@ export class UserEntity {
 	@Column()
 	referralCode: string
 
+	@ApiModelProperty({ description: 'The search location of the User' })
+	@Column()
+	searchLocation: string
+
 	// @Column()
 	// countryCode: string; // Vietname +84
 	// @Column()
