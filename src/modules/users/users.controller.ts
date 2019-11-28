@@ -34,6 +34,7 @@ import { VerifyUserDto } from './dto/verify-user.dto'
 import { ACCESS_TOKEN_SECRET } from '../../environments'
 import { OtpUserDto } from './dto/otp-user.dto'
 import { ErrorResponseDto } from './dto/error-response.dto'
+import { LoginResponseDto } from './dto/login-response.dto'
 
 @ApiResponse({ status: 401, description: 'Unauthorized.', type: ErrorResponseDto })
 @ApiResponse({ status: 403, description: 'Forbidden.', type: ErrorResponseDto })
@@ -51,7 +52,7 @@ export class UsersController {
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Retrieve many Users'
+		title: 'Retrieve many Users 👻'
 	})
 	@Get()
 	findAll() {
@@ -64,7 +65,7 @@ export class UsersController {
 		type: UserEntity
 	})
 	@ApiOperation({
-		title: 'Create one User'
+		title: 'Create one User 👻'
 	})
 	@Post()
 	async insert(@Body() createUserDto: CreateUserDto) {
@@ -81,7 +82,7 @@ export class UsersController {
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Retrieve one User'
+		title: 'Retrieve one User 👻'
 	})
 	@Get(':id')
 	findOne(@Param('id') id: string) {
@@ -91,7 +92,7 @@ export class UsersController {
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Update one User'
+		title: 'Update one User 👻'
 	})
 	@Patch(':id')
 	update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
@@ -101,7 +102,7 @@ export class UsersController {
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Replace one User'
+		title: 'Replace one User 👻'
 	})
 	@Put(':id')
 	replace(@Param('id') id: string, @Body() replaceUserDto: ReplaceUserDto) {
@@ -110,13 +111,13 @@ export class UsersController {
 
 	@ApiResponse({
 		status: 200,
-		description: 'The found record is executed',
+		description: 'The found record is executed 👻',
 		type: Boolean
 	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Delete one User'
+		title: 'Delete one User 👻'
 	})
 	@Delete(':id')
 	remove(@Param('id') id: string) {
@@ -131,7 +132,7 @@ export class UsersController {
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Update one Avatar for current User'
+		title: 'Update one Avatar for current User 👻'
 	})
 	@Post('avatar')
 	@ApiConsumes('multipart/form-data')
@@ -149,7 +150,7 @@ export class UsersController {
 	}
 
 	@ApiOperation({
-		title: 'Otp one User'
+		title: 'Otp one User 👻'
 	})
 	@Post('/otp')
 	otp(@Body() otpUserDto: OtpUserDto) {
@@ -159,13 +160,13 @@ export class UsersController {
 	@ApiResponse({
 		status: 200,
 		description: 'The found record is executed',
-		type: Boolean
+		type: LoginResponseDto
 	})
 	@ApiOperation({
-		title: 'Verify one User'
+		title: 'Verify one User 👻'
 	})
 	@Post('/verify')
-	async verify(@Body() verifyUserDto: VerifyUserDto) {
+	async verify(@Body() verifyUserDto: VerifyUserDto): Promise<LoginResponseDto | undefined> {
 		const updateUser = await this.userService.verify(verifyUserDto)
 		// console.log(updateUser)
 		const { _id } = updateUser
@@ -174,7 +175,7 @@ export class UsersController {
 		const payload = { sub: _id, expiresIn }
 
 		return {
-			access_token: jwt.sign(payload, ACCESS_TOKEN_SECRET!, { expiresIn }),
+			accessToken: jwt.sign(payload, ACCESS_TOKEN_SECRET!, { expiresIn }),
 			expiresIn
 		}
 	}

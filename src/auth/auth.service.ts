@@ -3,6 +3,7 @@ import { UsersService } from '../modules/users/users.service'
 import { JwtService } from '@nestjs/jwt'
 import { comparePassword } from '../utils'
 import { UserEntity } from '../modules/users/user.entity'
+import { LoginResponseDto } from 'modules/users/dto/login-response.dto'
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
 		return null
 	}
 
-	async login(user: UserEntity) {
+	async login(user: UserEntity): Promise<LoginResponseDto> {
 		const { _id } = user
 		const payload = { sub: _id }
 		const expiresIn = 60 * 60 * 24 * 30

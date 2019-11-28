@@ -1,7 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsOptional, Min, Max, IsNumber, IsBoolean } from 'class-validator'
 
-export class CreateBannerDto {
+export class ReplaceBannerDto {
 
 	@ApiModelProperty({
 		default: 'Enjoy Chewapp for Free',

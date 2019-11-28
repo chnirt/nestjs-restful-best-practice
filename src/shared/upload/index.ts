@@ -1,5 +1,4 @@
 import * as cloudinary from 'cloudinary'
-import * as fs from 'fs'
 
 import { CLOUD_NAME, API_KEY, API_SECRET } from '../../environments'
 
@@ -14,7 +13,7 @@ import { CLOUD_NAME, API_KEY, API_SECRET } from '../../environments'
  *
  * @beta
  */
-export const uploadFile = async (file: any): Promise<any> => {
+export const uploadFile = async (file: any): Promise<string> => {
 	cloudinary.config({
 		cloud_name: CLOUD_NAME!,
 		api_key: API_KEY!,
@@ -41,5 +40,6 @@ export const uploadFile = async (file: any): Promise<any> => {
 			.end(file.buffer)
 	})
 
+	// tslint:disable-next-line:no-string-literal
 	return result['secure_url']
 }

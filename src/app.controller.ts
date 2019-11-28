@@ -29,6 +29,7 @@ import { STATIC, SSL } from './environments'
 import { uploadFile } from './shared/upload'
 import { LoginResponseDto } from './modules/users/dto/login-response.dto'
 import { ErrorResponseDto } from './modules/users/dto/error-response.dto'
+import { UserEntity } from './modules/users/user.entity'
 
 @ApiResponse({ status: 401, description: 'Unauthorized.', type: ErrorResponseDto })
 @ApiResponse({ status: 403, description: 'Forbidden.', type: ErrorResponseDto })
@@ -51,19 +52,26 @@ export class AppController {
 		description: 'The found record',
 		type: LoginResponseDto
 	})
-
 	@UseGuards(AuthGuard('local'))
 	@ApiOperation({
-		title: 'Retrieve one Acess token'
+		title: 'Retrieve one Acess token 👻'
 	})
 	@Post('login')
 	@ApiImplicitBody({ name: 'input', type: LoginUserDto })
-	login(@Request() req) {
+	login(@Request() req): Promise<LoginResponseDto> {
 		return this.authService.login(req.user)
 	}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found profile',
+		type: UserEntity
+	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
+	@ApiOperation({
+		title: 'Retrieve one Profile 👻'
+	})
 	@Get('profile')
 	getProfile(@Request() req) {
 		return req.user
@@ -76,15 +84,17 @@ export class AppController {
 	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
+	@ApiOperation({
+		title: 'Create one File 👻'
+	})
 	@Post('upload')
 	@ApiConsumes('multipart/form-data')
 	@ApiImplicitFile({
 		name: 'file',
 		required: true,
-		description: 'one file.'
 	})
 	@UseInterceptors(FileInterceptor('file'))
-	async uploadFile(@UploadedFile() file) {
+	async uploadFile(@UploadedFile() file): Promise<string> {
 		const path = await uploadFile(file)
 
 		return path

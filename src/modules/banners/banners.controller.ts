@@ -1,10 +1,11 @@
-import { Controller, Get, Query, Post, Body, Request, UseGuards } from '@nestjs/common';
-import { BannersService } from './banners.service';
+import { Controller, Get, Query, Post, Body, Request, UseGuards, Put, Param } from '@nestjs/common';
+import { BannersService, Banner } from './banners.service';
 import { ApiOperation, ApiImplicitQuery, ApiUseTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { CreateBannerDto } from './dto/create-banner.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { ErrorResponseDto } from '../../modules/users/dto/error-response.dto';
 import { BannerEntity } from './banner.entity';
+import { ReplaceBannerDto } from './dto/replace-banner.dto';
+import { ErrorResponseDto } from '../users/dto/error-response.dto';
 
 @ApiResponse({ status: 401, description: 'Unauthorized.', type: ErrorResponseDto })
 @ApiResponse({ status: 403, description: 'Forbidden.', type: ErrorResponseDto })
@@ -19,7 +20,7 @@ export class BannersController {
     type: [BannerEntity]
   })
   @ApiOperation({
-    title: 'Retrieve many Banners'
+    title: 'Retrieve many Banners 👻'
     // description: 'Aaa',
     // operationId: 'aaaa'
   })
@@ -36,7 +37,7 @@ export class BannersController {
     required: false,
     type: Number
   })
-  findAll(@Query() query) {
+  findAll(@Query() query): Promise<Banner> {
     return this.bannersService.findAll(query)
   }
 
@@ -48,10 +49,20 @@ export class BannersController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({
-    title: 'Create one Banner'
+    title: 'Create one Banner 👻'
   })
   @Post()
-  insert(@Body() createBannerDto: CreateBannerDto) {
+  insert(@Body() createBannerDto: CreateBannerDto): Promise<boolean> {
     return this.bannersService.insert(createBannerDto)
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  @ApiOperation({
+    title: 'Replace one Banner 👻'
+  })
+  @Put(':id')
+  replace(@Param('id') id: string, @Body() replaceBannerDto: ReplaceBannerDto): Promise<boolean> {
+    return this.bannersService.findOneAndReplace(id, replaceBannerDto)
   }
 }
