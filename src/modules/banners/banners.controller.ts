@@ -56,6 +56,11 @@ export class BannersController {
     return this.bannersService.insert(createBannerDto)
   }
 
+  @ApiResponse({
+    status: 200,
+    description: 'The found record is executed',
+    type: Boolean
+  })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({
