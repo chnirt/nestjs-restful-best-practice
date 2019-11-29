@@ -149,6 +149,11 @@ export class UsersController {
 		return this.userService.updateAvatar(_id, file)
 	}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found record is executed',
+		type: Boolean
+	})
 	@ApiOperation({
 		title: 'Otp one User 👻'
 	})
