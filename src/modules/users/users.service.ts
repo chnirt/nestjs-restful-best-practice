@@ -15,13 +15,10 @@ import { ReplaceUserDto } from './dto/replace-user.dto'
 
 import { uploadFile } from '../../shared'
 
-import {
-	SPEAKEASY_SECRET,
-	SPEAKEASY_DIGITS,
-	SPEAKEASY_STEP
-} from '../../environments'
+import { SPEAKEASY_SECRET, SPEAKEASY_STEP } from '../../environments'
 import { OtpUserDto } from './dto/otp-user.dto'
 import { VerifyUserDto } from './dto/verify-user.dto'
+import { OtpResponseDto } from './dto/otp-response.dto'
 
 const validator = new Validator()
 export type User = any
@@ -138,14 +135,12 @@ export class UsersService {
 		return updateUser ? true : false
 	}
 
-	async otp(otpUserDto: OtpUserDto) {
-		const { email, phone } = otpUserDto
-
+	async otp(_id: string, phone: string): Promise<OtpResponseDto | undefined> {
 		validator.isMobilePhone(phone, 'en-SG')
 
 		const foundUser = await getMongoRepository(UserEntity).findOne({
 			where: {
-				email,
+				_id,
 				verified: false
 			}
 		})
@@ -175,13 +170,10 @@ export class UsersService {
 		}
 	}
 
-	async verify(verifyUserDto: VerifyUserDto) {
-		const { email, phone, otp } = verifyUserDto
-
+	async verify(_id: string, otp: string) {
 		const foundUser = await getMongoRepository(UserEntity).findOne({
 			where: {
-				email,
-				phone,
+				_id,
 				verified: false
 			}
 		})

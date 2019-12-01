@@ -1,20 +1,23 @@
 import { Injectable } from '@nestjs/common'
-import { UsersService } from '../modules/users/users.service'
 import { JwtService } from '@nestjs/jwt'
 import { comparePassword } from '../utils'
 import { UserEntity } from '../modules/users/user.entity'
+import { LoginResponseDto } from 'modules/users/dto/login-response.dto'
+import { getMongoRepository } from 'typeorm'
 
 @Injectable()
 export class AuthService {
-	constructor(
-		private readonly usersService: UsersService,
-		private readonly jwtService: JwtService
-	) {}
+	constructor(private readonly jwtService: JwtService) {}
 
-	async validateUser(username: string, pass: string): Promise<UserEntity> {
-		const user = await this.usersService.findOneWithEmail(username)
+	async validateUser(email: string, password: string): Promise<any> {
+		const user = await getMongoRepository(UserEntity).findOne({
+			where: {
+				email
+			}
+		})
 
-		if (user && (await comparePassword(pass, user.password))) {
+		if (user && (await comparePassword(password, user.password))) {
+			// tslint:disable-next-line: no-shadowed-variable
 			const { password, ...result } = user
 
 			return result
@@ -23,19 +26,17 @@ export class AuthService {
 		return null
 	}
 
-	async login(user: UserEntity) {
+	async login(user: UserEntity): Promise<LoginResponseDto> {
 		const { _id } = user
 		const payload = { sub: _id }
 		const expiresIn = 60 * 60 * 24 * 30
 
 		return {
-			access_token: this.jwtService.sign(payload, {
+			accessToken: this.jwtService.sign(payload, {
 				expiresIn
 			}),
-			expiresIn: '30d'
+			user,
+			expiresIn
 		}
-
-		// const { _id, verified } = user
-		// return { _id, verified }
 	}
 }

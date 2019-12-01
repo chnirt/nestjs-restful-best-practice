@@ -40,7 +40,7 @@ export class AddressEntity {
 
 	@ApiModelProperty({ description: 'The createdBy of the Address' })
 	@Column()
-	createdBy: UserEntity
+	createdBy: string
 
 	@ApiModelProperty({ description: 'The createdAt of the Address' })
 	@Column()

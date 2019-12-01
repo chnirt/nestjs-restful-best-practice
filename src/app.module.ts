@@ -16,8 +16,9 @@ import { EventsGateway } from './modules/events/events.gateway'
 import { STATIC } from './environments'
 import { DealsModule } from './modules/deals/deals.module'
 import { BiddersModule } from './modules/bidders/bidders.module'
-import { AddressesModule } from './modules/addresses/addresses.module';
-import { ConnectionsModule } from './modules/connections/connections.module';
+import { AddressesModule } from './modules/addresses/addresses.module'
+import { ConnectionsModule } from './modules/connections/connections.module'
+import { BannersModule } from './modules/banners/banners.module'
 
 @Module({
 	imports: [
@@ -36,19 +37,20 @@ import { ConnectionsModule } from './modules/connections/connections.module';
 		TerminusModule.forRootAsync({
 			useClass: TerminusOptionsService
 		}),
-		UsersModule,
 		AuthModule,
+		UsersModule,
 		EventsModule,
 		DealsModule,
 		BiddersModule,
 		AddressesModule,
-		ConnectionsModule
+		ConnectionsModule,
+		BannersModule
 	],
 	controllers: [AppController],
 	providers: [AppService, EventsGateway]
 })
 export class AppModule implements OnModuleInit {
 	onModuleInit() {
-		console.log(`The module has been initialized.`)
+		console.log('The module has been initialized.')
 	}
 }

@@ -33,50 +33,67 @@ import { ReplaceUserDto } from './dto/replace-user.dto'
 import { VerifyUserDto } from './dto/verify-user.dto'
 import { ACCESS_TOKEN_SECRET } from '../../environments'
 import { OtpUserDto } from './dto/otp-user.dto'
+import { ErrorResponseDto } from './dto/error-response.dto'
+import { LoginResponseDto } from './dto/login-response.dto'
+import { OtpResponseDto } from './dto/otp-response.dto'
+import { AuthService } from '../../auth/auth.service'
 
-// @ApiBearerAuth()
-// @UseGuards(AuthGuard('jwt'))
 @ApiResponse({
-	status: 200,
-	description: 'The found record',
-	type: [UserEntity]
+	status: 401,
+	description: 'Unauthorized.',
+	type: ErrorResponseDto
 })
-@ApiResponse({
-	status: 201,
-	description: 'The record has been successfully created.',
-	type: UserEntity
-})
-@ApiResponse({ status: 403, description: 'Forbidden.' })
+@ApiResponse({ status: 403, description: 'Forbidden.', type: ErrorResponseDto })
 @UseInterceptors(ClassSerializerInterceptor)
 @ApiUseTags('users')
 @Controller('users')
 export class UsersController {
-	constructor(private readonly userService: UsersService) {}
+	constructor(
+		private readonly authService: AuthService,
+		private readonly userService: UsersService
+	) {}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found records',
+		type: [UserEntity]
+	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Retrieve many Users'
+		title: 'Retrieve many Users 👻'
 	})
 	@Get()
 	findAll() {
 		return this.userService.findAll()
 	}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found record',
+		type: LoginResponseDto
+	})
 	@ApiOperation({
-		title: 'Create one User'
+		title: 'Create one User 👻'
 	})
 	@Post()
 	async insert(@Body() createUserDto: CreateUserDto) {
 		const newUser = await this.userService.insert(createUserDto)
 
-		return newUser
+		const loginResponseDto = await this.authService.login(newUser)
+
+		return loginResponseDto
 	}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found record',
+		type: UserEntity
+	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Retrieve one User'
+		title: 'Retrieve one User 👻'
 	})
 	@Get(':id')
 	findOne(@Param('id') id: string) {
@@ -86,7 +103,7 @@ export class UsersController {
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Update one User'
+		title: 'Update one User 👻'
 	})
 	@Patch(':id')
 	update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
@@ -96,27 +113,37 @@ export class UsersController {
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Replace one User'
+		title: 'Replace one User 👻'
 	})
 	@Put(':id')
 	replace(@Param('id') id: string, @Body() replaceUserDto: ReplaceUserDto) {
 		return this.userService.findOneAndReplace(id, replaceUserDto)
 	}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found record is executed 👻',
+		type: Boolean
+	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Delete one User'
+		title: 'Delete one User 👻'
 	})
 	@Delete(':id')
 	remove(@Param('id') id: string) {
 		return this.userService.deleteOne(id)
 	}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found record is executed',
+		type: Boolean
+	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Update one Avatar for current User'
+		title: 'Update one Avatar for current User 👻'
 	})
 	@Post('avatar')
 	@ApiConsumes('multipart/form-data')
@@ -126,36 +153,53 @@ export class UsersController {
 		description: 'Send one file'
 	})
 	@UseInterceptors(FileInterceptor('avatar'))
-	updateAvatar(@UploadedFile() file, @Request() req) {
+	updateAvatar(@Request() req, @UploadedFile() file) {
 		const { user } = req
 		const { _id } = user
 
 		return this.userService.updateAvatar(_id, file)
 	}
 
-	@ApiOperation({
-		title: 'Otp one User'
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
+	@ApiResponse({
+		status: 200,
+		description: 'The found record is executed',
+		type: OtpResponseDto
 	})
-	@Post('/otp')
-	otp(@Body() otpUserDto: OtpUserDto) {
-		return this.userService.otp(otpUserDto)
+	@ApiOperation({
+		title: 'Otp one User 👻'
+	})
+	@Post('/otp/:phone')
+	otp1(@Request() req, @Param('phone') phone: string) {
+		const { user } = req
+		const { _id } = user
+
+		return this.userService.otp(_id, phone)
 	}
 
-	@ApiOperation({
-		title: 'Verify one User'
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
+	@ApiResponse({
+		status: 200,
+		description: 'The found record is executed',
+		type: LoginResponseDto
 	})
-	@Post('/verify')
-	async verify(@Body() verifyUserDto: VerifyUserDto) {
-		const updateUser = await this.userService.verify(verifyUserDto)
-		// console.log(updateUser)
-		const { _id } = updateUser
+	@ApiOperation({
+		title: 'Verify one User 👻'
+	})
+	@Post('/verify/:otp')
+	async verify(
+		@Request() req,
+		@Param('otp') otp: string
+	): Promise<LoginResponseDto | undefined> {
+		const { user } = req
+		const { _id } = user
 
-		const expiresIn = '30d'
-		const payload = { sub: _id, expiresIn }
+		const updateUser = await this.userService.verify(_id, otp)
 
-		return {
-			access_token: jwt.sign(payload, ACCESS_TOKEN_SECRET!, { expiresIn }),
-			expiresIn
-		}
+		const loginResponseDto = await this.authService.login(updateUser)
+
+		return loginResponseDto
 	}
 }
