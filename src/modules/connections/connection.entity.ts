@@ -44,6 +44,7 @@ export class ConnectionEntity {
 		if (partial) {
 			Object.assign(this, partial)
 			this._id = this._id || uuidv4()
+			this.connectionType = ConnectionType.Connected
 			this.createdAt = this.createdAt || +new Date()
 			this.updatedAt = +new Date()
 		}

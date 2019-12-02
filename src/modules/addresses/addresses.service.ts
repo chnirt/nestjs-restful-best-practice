@@ -7,7 +7,7 @@ export type Address = any
 
 @Injectable()
 export class AddressesService {
-	async findAll(query, req): Promise<Address[]> {
+	async findAll(query: any, req: any): Promise<Address[]> {
 		const { offset, limit } = query
 		const { user } = req
 		const { _id } = user
@@ -20,7 +20,9 @@ export class AddressesService {
 			throw new ForbiddenException('The offset must be greater than 0')
 		}
 
-		const addresses = await getMongoRepository(AddressEntity).find({ createdBy: _id })
+		const addresses = await getMongoRepository(AddressEntity).find({
+			createdBy: _id
+		})
 
 		return addresses
 	}
@@ -31,10 +33,15 @@ export class AddressesService {
 		const { addressType } = createAddressDto
 
 		if (addressType !== 'Others') {
-			const foundAddress = await getMongoRepository(AddressEntity).findOne({ addressType, createdBy: _id })
+			const foundAddress = await getMongoRepository(AddressEntity).findOne({
+				addressType,
+				createdBy: _id
+			})
 
 			if (foundAddress) {
-				throw new ForbiddenException(`Address at ${addressType} already existed`)
+				throw new ForbiddenException(
+					`Address at ${addressType} already existed`
+				)
 			}
 		}
 
