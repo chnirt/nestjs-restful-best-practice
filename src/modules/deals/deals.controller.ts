@@ -22,6 +22,7 @@ import {
 } from '@nestjs/swagger'
 
 import { CreateDealDto } from './dto/create-deal.dto'
+import { FilterDealDto } from './dto/filter-deal.dto'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { AuthGuard } from '@nestjs/passport'
 
@@ -47,6 +48,12 @@ export class DealsController {
 		description: 'The maximum number of transactions to skip',
 		required: false,
 		type: Number
+	})
+	@ApiImplicitQuery({
+		name: 'filter',
+		description: 'The maximum number of transactions to skip',
+		required: false,
+		type: FilterDealDto
 	})
 	findAll(@Query() query) {
 		return this.dealsService.findAll(query)

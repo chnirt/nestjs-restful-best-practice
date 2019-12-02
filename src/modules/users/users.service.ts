@@ -16,8 +16,6 @@ import { ReplaceUserDto } from './dto/replace-user.dto'
 import { uploadFile } from '../../shared'
 
 import { SPEAKEASY_SECRET, SPEAKEASY_STEP } from '../../environments'
-import { OtpUserDto } from './dto/otp-user.dto'
-import { VerifyUserDto } from './dto/verify-user.dto'
 import { OtpResponseDto } from './dto/otp-response.dto'
 
 const validator = new Validator()

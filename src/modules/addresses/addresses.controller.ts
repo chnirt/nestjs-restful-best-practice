@@ -7,7 +7,13 @@ import {
 	Get,
 	Query
 } from '@nestjs/common'
-import { ApiOperation, ApiBearerAuth, ApiImplicitQuery, ApiUseTags, ApiResponse } from '@nestjs/swagger'
+import {
+	ApiOperation,
+	ApiBearerAuth,
+	ApiImplicitQuery,
+	ApiUseTags,
+	ApiResponse
+} from '@nestjs/swagger'
 import { CreateAddressDto } from './dto/create-address.dto'
 import { AddressesService, Address } from './addresses.service'
 import { AuthGuard } from '@nestjs/passport'
@@ -16,12 +22,16 @@ import { AddressEntity } from './address.entity'
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
-@ApiResponse({ status: 401, description: 'Unauthorized.', type: ErrorResponseDto })
+@ApiResponse({
+	status: 401,
+	description: 'Unauthorized.',
+	type: ErrorResponseDto
+})
 @ApiResponse({ status: 403, description: 'Forbidden.', type: ErrorResponseDto })
 @ApiUseTags('addresses')
 @Controller('addresses')
 export class AddressesController {
-	constructor(private readonly addressesService: AddressesService) { }
+	constructor(private readonly addressesService: AddressesService) {}
 
 	@ApiResponse({
 		status: 200,
@@ -56,10 +66,13 @@ export class AddressesController {
 		type: Boolean
 	})
 	@ApiOperation({
-		title: 'Create one Address'
+		title: 'Create one Address 👻'
 	})
 	@Post()
-	insert(@Body() createAddressDto: CreateAddressDto, @Request() req): Promise<boolean> {
+	insert(
+		@Body() createAddressDto: CreateAddressDto,
+		@Request() req
+	): Promise<boolean> {
 		return this.addressesService.insert(createAddressDto, req)
 	}
 }

@@ -31,6 +31,8 @@ export class AuthService {
 		const payload = { sub: _id }
 		const expiresIn = 60 * 60 * 24 * 30
 
+		user.password = null
+
 		return {
 			accessToken: this.jwtService.sign(payload, {
 				expiresIn
