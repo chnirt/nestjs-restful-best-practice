@@ -17,8 +17,7 @@ export enum ItemType {
 	Meal = 'Meal',
 	Drinks = 'Drinks',
 	Desserts = 'Desserts',
-	Snacks = 'Snacks',
-	Anything = 'Anything'
+	Snacks = 'Snacks'
 }
 
 export enum PaymentType {

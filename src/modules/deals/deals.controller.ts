@@ -76,7 +76,7 @@ export class DealsController {
 	@ApiConsumes('multipart/form-data')
 	@ApiImplicitFile({
 		name: 'thumbnail',
-		required: true,
+		// required: true,
 		description: 'Send one file'
 	})
 	@UseInterceptors(FileInterceptor('thumbnail'))

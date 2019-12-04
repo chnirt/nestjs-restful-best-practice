@@ -2,7 +2,7 @@ import { ApiModelProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsEnum, IsOptional } from 'class-validator'
 
 import { ItemType, ServiceType, PaymentType, DealType } from '../enum/deal.enum'
-import { Position } from '../interface/potisition.interface'
+import { Position } from '../entity/position.entity'
 
 export class CreateDealDto {
 	@ApiModelProperty({
@@ -31,7 +31,7 @@ export class CreateDealDto {
 	readonly serviceType: ServiceType
 
 	@ApiModelProperty({
-		enum: ['None', 'Meal', 'Drinks', 'Desserts', 'Snacks', 'Anything'],
+		enum: ['None', 'Meal', 'Drinks', 'Desserts', 'Snacks'],
 		example: 'Meal',
 		description: 'The item type of the Deal'
 	})

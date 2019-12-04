@@ -4,7 +4,7 @@ import { uuidv4 } from '../../utils'
 import { ApiModelProperty } from '@nestjs/swagger'
 
 import { UserEntity } from '../users/user.entity'
-import { Position } from '../deals/interface/potisition.interface'
+import { Position } from '../deals/entity/position.entity'
 import { AddressType } from './enum/address.enum'
 
 @Entity({

@@ -9,6 +9,7 @@ import { CreateDealDto } from './dto/create-deal.dto'
 import { DealEntity } from './deal.entity'
 import { uploadFile } from '../../shared'
 import { ServiceType, ItemType } from './enum/deal.enum'
+import { Position } from './entity/position.entity'
 
 export type Deal = any
 
@@ -84,6 +85,7 @@ export class DealsService {
 			serviceType,
 			itemType,
 			location,
+			destination,
 			duration,
 			payment
 		} = createDealDto
@@ -92,22 +94,26 @@ export class DealsService {
 		let newDeal
 
 		if (
-			createDealDto.serviceType === ServiceType.FoodDelivery &&
-			createDealDto.itemType === ItemType.None
+			(createDealDto.serviceType === ServiceType.FoodDelivery &&
+				createDealDto.itemType === ItemType.None) ||
+			(createDealDto.serviceType !== ServiceType.FoodDelivery &&
+				createDealDto.itemType !== ItemType.None)
 		) {
 			throw new ForbiddenException('Service type and Item type is incorrect.')
 		}
 
 		if (file && file.size > 1024 * 1024 * 2) {
-			throw new ForbiddenException('The import file is too large to upload')
+			throw new ForbiddenException('The thumbnail is too large to upload')
 		}
 
-		if (createDealDto.itemType === ItemType.Anything) {
+		// console.log(createDealDto.location)
+
+		if (createDealDto.items === 'Anything') {
 			convertCreateDealDto = {
 				dealType,
 				serviceType,
 				itemType,
-				location,
+				location: JSON.parse(location.toString()),
 				duration,
 				payment
 			}
@@ -118,11 +124,17 @@ export class DealsService {
 
 			return newDeal
 		} else {
+			if (!file) {
+				throw new ForbiddenException('Thumbnail not found.')
+			}
+
 			const thumbnail = await uploadFile(file)
 
 			convertCreateDealDto = {
 				...createDealDto,
 				thumbnail,
+				location: JSON.parse(location.toString()),
+				destination: JSON.parse(destination.toString()),
 				expiredAt: +new Date() + 1000 * createDealDto.duration,
 				createdBy: _id
 			}
@@ -139,9 +151,5 @@ export class DealsService {
 
 			return newDeal
 		}
-	}
-
-	async update() {
-		return ''
 	}
 }
