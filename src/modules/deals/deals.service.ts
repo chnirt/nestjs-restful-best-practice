@@ -10,6 +10,7 @@ import { DealEntity } from './deal.entity'
 import { uploadFile } from '../../shared'
 import { ServiceType, ItemType } from './enum/deal.enum'
 import { Position } from './entity/position.entity'
+import { UserEntity } from '../../modules/users/user.entity'
 
 export type Deal = any
 
@@ -173,6 +174,19 @@ export class DealsService {
 			newDeal = await getMongoRepository(DealEntity).save(
 				new DealEntity(convertCreateDealDto)
 			)
+
+			const createdBy = await getMongoRepository(UserEntity).findOne({
+				where: {
+					_id: newDeal.createdBy
+				},
+				select: ['_id', 'name', 'avatar']
+			})
+
+			newDeal.createdBy = {
+				_id: createdBy._id,
+				name: createdBy.name,
+				avatar: createdBy.avatar
+			}
 
 			return newDeal
 		}
