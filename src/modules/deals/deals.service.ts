@@ -17,19 +17,17 @@ export type Deal = any
 export class DealsService {
 	async findAll(query): Promise<Deal[] | undefined> {
 		console.log(query)
-		const { filter, offset, limit } = query
+		const { dealType, serviceType, itemType, offset, limit } = query
 
 		const pipelineArray = []
-
-		if (filter) {
-			pipelineArray.push({ $match: filter })
-		}
 
 		if (offset) {
 			if (offset < 1) {
 				throw new ForbiddenException('The offset must be greater than 0')
 			} else {
-				pipelineArray.push({ $skip: +offset })
+				pipelineArray.push({
+					$skip: +offset
+				})
 			}
 		}
 
@@ -37,7 +35,9 @@ export class DealsService {
 			if (limit < 1) {
 				throw new ForbiddenException('The limit must be greater than 0')
 			} else {
-				pipelineArray.push({ $limit: +limit })
+				pipelineArray.push({
+					$limit: +limit
+				})
 			}
 		}
 
@@ -70,6 +70,20 @@ export class DealsService {
 		]
 
 		pipelineArray.push(...createdBy)
+
+		console.log(dealType)
+
+		if (dealType) {
+			pipelineArray.push({ $match: { dealType } })
+		}
+
+		if (serviceType) {
+			pipelineArray.push({ $match: { serviceType } })
+		}
+
+		if (itemType) {
+			pipelineArray.push({ $match: { itemType } })
+		}
 
 		return getMongoRepository(DealEntity)
 			.aggregate(pipelineArray)

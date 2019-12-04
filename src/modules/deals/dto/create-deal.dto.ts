@@ -7,7 +7,7 @@ import { Position } from '../entity/position.entity'
 export class CreateDealDto {
 	@ApiModelProperty({
 		enum: ['Request', 'Offer'],
-		example: 'Meal',
+		example: 'Request',
 		description: 'The deal type of the Deal'
 	})
 	@IsEnum(DealType)

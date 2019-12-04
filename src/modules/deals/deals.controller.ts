@@ -25,6 +25,7 @@ import { CreateDealDto } from './dto/create-deal.dto'
 import { FilterDealDto } from './dto/filter-deal.dto'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { AuthGuard } from '@nestjs/passport'
+import { ItemType, ServiceType, DealType } from './enum/deal.enum'
 
 @ApiUseTags('deals')
 @Controller('deals')
@@ -50,10 +51,32 @@ export class DealsController {
 		type: Number
 	})
 	@ApiImplicitQuery({
-		name: 'filter',
-		description: 'The maximum number of transactions to skip',
+		name: 'itemType',
+		description: 'The itemType of the Deal',
 		required: false,
-		type: FilterDealDto
+		type: ItemType,
+		enum: ['None', 'Meal', 'Drinks', 'Desserts', 'Snacks']
+	})
+	@ApiImplicitQuery({
+		name: 'serviceType',
+		description: 'The serviceType of the Deal',
+		required: false,
+		type: ServiceType,
+		enum: [
+			'FoodDelivery',
+			'Pickup',
+			'PharmacyPurchase',
+			'Queue',
+			'OverseasPurchase',
+			'Others'
+		]
+	})
+	@ApiImplicitQuery({
+		name: 'dealType',
+		description: 'The dealType of the Deal',
+		required: false,
+		type: DealType,
+		enum: ['Request', 'Offer']
 	})
 	findAll(@Query() query) {
 		return this.dealsService.findAll(query)
