@@ -16,10 +16,14 @@ export type Deal = any
 @Injectable()
 export class DealsService {
 	async findAll(query): Promise<Deal[] | undefined> {
-		// console.log(query)
-		const { offset, limit } = query
+		console.log(query)
+		const { filter, offset, limit } = query
 
 		const pipelineArray = []
+
+		if (filter) {
+			pipelineArray.push({ $match: filter })
+		}
 
 		if (offset) {
 			if (offset < 1) {
@@ -55,6 +59,12 @@ export class DealsService {
 					'createdBy.createdAt': 0,
 					'createdBy.updatedAt': 0,
 					'createdBy.phone': 0
+				}
+			},
+			{
+				$unwind: {
+					path: '$createdBy',
+					preserveNullAndEmptyArrays: true
 				}
 			}
 		]
