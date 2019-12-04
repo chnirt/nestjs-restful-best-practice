@@ -7,7 +7,7 @@ export class Position {
 	// 	example: '10.780230999999999',
 	// 	description: 'The latitude of the Position'
 	// })
-	@IsNotEmpty()
+	// @IsNotEmpty()
 	latitude: string
 
 	// @ApiModelProperty({
@@ -15,6 +15,6 @@ export class Position {
 	// 	example: '106.6645121',
 	// 	description: 'The longitude of the Position'
 	// })
-	@IsNotEmpty()
+	// @IsNotEmpty()
 	longitude: string
 }
