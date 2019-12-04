@@ -32,7 +32,7 @@ export class DealsController {
 	constructor(private readonly dealsService: DealsService) {}
 
 	@ApiOperation({
-		title: 'Retrieve many Deals'
+		title: 'Retrieve many Deals 👻'
 		// description: 'Aaa',
 		// operationId: 'aaaa'
 	})
@@ -60,7 +60,7 @@ export class DealsController {
 	}
 
 	@ApiOperation({
-		title: 'Retrieve one Deal'
+		title: 'Retrieve one Deal 👻'
 	})
 	@Get(':id')
 	findOne(@Param('id') id: string) {
@@ -70,7 +70,7 @@ export class DealsController {
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Create one Deal'
+		title: 'Create one Deal 👻'
 	})
 	@Post()
 	@ApiConsumes('multipart/form-data')

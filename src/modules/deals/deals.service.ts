@@ -114,6 +114,7 @@ export class DealsService {
 				serviceType,
 				itemType,
 				location: JSON.parse(location.toString()),
+				destination: JSON.parse(destination.toString()),
 				duration,
 				payment
 			}
