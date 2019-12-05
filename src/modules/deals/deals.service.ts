@@ -102,92 +102,94 @@ export class DealsService {
 
 	async insert(createDealDto: CreateDealDto, file: any, req: any) {
 		// console.log(createDealDto, file, req.user._id)
-		const { user } = req
-		const { _id } = user
-		const {
-			dealType,
-			serviceType,
-			itemType,
-			location,
-			destination,
-			duration,
-			payment
-		} = createDealDto
-
-		let convertCreateDealDto
-		let newDeal
-
-		if (
-			(createDealDto.serviceType === ServiceType.FoodDelivery &&
-				createDealDto.itemType === ItemType.None) ||
-			(createDealDto.serviceType !== ServiceType.FoodDelivery &&
-				createDealDto.itemType !== ItemType.None)
-		) {
-			throw new ForbiddenException('Service type and Item type is incorrect.')
-		}
-
-		if (file && file.size > 1024 * 1024 * 2) {
-			throw new ForbiddenException('The thumbnail is too large to upload')
-		}
-
-		// console.log(createDealDto)
-
-		if (createDealDto.items === 'Anything') {
-			convertCreateDealDto = {
+		try {
+			const { user } = req
+			const { _id } = user
+			const {
 				dealType,
 				serviceType,
 				itemType,
-				location: JSON.parse(location.toString()),
-				destination: JSON.parse(destination.toString()),
+				location,
+				destination,
 				duration,
 				payment
+			} = createDealDto
+
+			let convertCreateDealDto
+			let newDeal
+
+			if (
+				(createDealDto.serviceType === ServiceType.FoodDelivery &&
+					createDealDto.itemType === ItemType.None) ||
+				(createDealDto.serviceType !== ServiceType.FoodDelivery &&
+					createDealDto.itemType !== ItemType.None)
+			) {
+				throw new ForbiddenException('Service type and Item type is incorrect.')
 			}
 
-			newDeal = await getMongoRepository(DealEntity).save(
-				new DealEntity(convertCreateDealDto)
-			)
-
-		} else {
-			if (!file) {
-				throw new ForbiddenException('Thumbnail not found.')
+			if (file && file.size > 1024 * 1024 * 2) {
+				throw new ForbiddenException('The thumbnail is too large to upload')
 			}
 
-			const thumbnail = await uploadFile(file)
+			// console.log(createDealDto)
 
-			convertCreateDealDto = {
-				...createDealDto,
-				thumbnail,
-				location: JSON.parse(location.toString()),
-				destination: JSON.parse(destination.toString()),
-				expiredAt: +new Date() + 1000 * createDealDto.duration,
-				createdBy: _id
+			if (createDealDto.items === 'Anything') {
+				convertCreateDealDto = {
+					dealType,
+					serviceType,
+					itemType,
+					location: JSON.parse(location.toString()),
+					destination: JSON.parse(destination.toString()),
+					duration,
+					payment
+				}
+
+				newDeal = await getMongoRepository(DealEntity).save(
+					new DealEntity(convertCreateDealDto)
+				)
+			} else {
+				if (!file) {
+					throw new ForbiddenException('Thumbnail not found.')
+				}
+
+				const thumbnail = await uploadFile(file)
+
+				convertCreateDealDto = {
+					...createDealDto,
+					thumbnail,
+					location: JSON.parse(location.toString()),
+					destination: JSON.parse(destination.toString()),
+					expiredAt: +new Date() + 1000 * createDealDto.duration,
+					createdBy: _id
+				}
+
+				delete convertCreateDealDto.duration
+
+				if (createDealDto.serviceType !== ServiceType.FoodDelivery) {
+					delete convertCreateDealDto.itemType
+				}
+
+				newDeal = await getMongoRepository(DealEntity).save(
+					new DealEntity(convertCreateDealDto)
+				)
 			}
 
-			delete convertCreateDealDto.duration
+			const createdBy = await getMongoRepository(UserEntity).findOne({
+				where: {
+					_id: newDeal.createdBy
+				},
+				select: ['_id', 'name', 'avatar']
+			})
 
-			if (createDealDto.serviceType !== ServiceType.FoodDelivery) {
-				delete convertCreateDealDto.itemType
+			newDeal.createdBy = {
+				_id: createdBy._id,
+				name: createdBy.name,
+				avatar: createdBy.avatar
 			}
 
-			newDeal = await getMongoRepository(DealEntity).save(
-				new DealEntity(convertCreateDealDto)
-			)
-
+			return newDeal
+		} catch (error) {
+			throw new Error(error)
 		}
-
-		const createdBy = await getMongoRepository(UserEntity).findOne({
-			where: {
-				_id: newDeal.createdBy
-			},
-			select: ['_id', 'name', 'avatar']
-		})
-
-		newDeal.createdBy = {
-			_id: createdBy._id,
-			name: createdBy.name,
-			avatar: createdBy.avatar
-		}
-
-		return newDeal
 	}
 }
