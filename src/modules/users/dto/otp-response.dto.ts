@@ -3,12 +3,12 @@ import { IsNotEmpty } from 'class-validator'
 
 export class OtpResponseDto {
 	@ApiModelProperty({
-		default: '678900',
-		example: '678900',
+		default: 678900,
+		example: 678900,
 		description: 'The otp of the OtpResponseDto'
 	})
 	@IsNotEmpty()
-	readonly otp: string
+	readonly otp: number
 
 	@ApiModelProperty({
 		default: '60s',

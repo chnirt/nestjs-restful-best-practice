@@ -131,7 +131,7 @@ export class DealsService {
 				throw new ForbiddenException('The thumbnail is too large to upload')
 			}
 
-			// console.log(createDealDto)
+			console.log(createDealDto)
 
 			if (createDealDto.items === 'Anything') {
 				convertCreateDealDto = {
@@ -148,6 +148,8 @@ export class DealsService {
 					new DealEntity(convertCreateDealDto)
 				)
 			} else {
+				console.log(createDealDto)
+
 				if (!file) {
 					throw new ForbiddenException('Thumbnail not found.')
 				}

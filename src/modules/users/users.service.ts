@@ -163,7 +163,7 @@ export class UsersService {
 		await getMongoRepository(UserEntity).save(foundUser)
 
 		return {
-			otp: token,
+			otp: +token,
 			remaining
 		}
 	}
