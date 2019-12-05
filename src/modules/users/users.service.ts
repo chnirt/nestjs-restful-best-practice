@@ -156,7 +156,7 @@ export class UsersService {
 		})
 
 		const remaining =
-			SPEAKEASY_STEP - Math.floor((+new Date() / 1000.0) % SPEAKEASY_STEP)
+			SPEAKEASY_STEP - Math.floor((+new Date() / 1000.0) % SPEAKEASY_STEP) + 's'
 
 		foundUser.phone = phone
 

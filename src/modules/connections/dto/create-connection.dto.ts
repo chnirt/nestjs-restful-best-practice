@@ -2,7 +2,7 @@ import { ApiModelProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsEnum, IsOptional } from 'class-validator'
 
 import { ConnectionType } from '../enum/connection.enum'
-import { Position } from '../../deals/entity/position.entity'
+import { PositionEntity } from '../../deals/entity/position.entity'
 
 export class CreateConnectionDto {
 	@ApiModelProperty({
@@ -25,7 +25,7 @@ export class CreateConnectionDto {
 		description: 'The location of the Connection'
 	})
 	@IsNotEmpty()
-	readonly location: Position
+	readonly location: PositionEntity
 
 	@ApiModelProperty({
 		default: 69,

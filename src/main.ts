@@ -74,7 +74,7 @@ async function bootstrap() {
 
 		const options = new DocumentBuilder()
 			.setTitle('Nestjs Restful Best Practice')
-			.setVersion('2.0.0')
+			.setVersion('3.0.0')
 			// .setHost('nestjs-restful-best-practice.herokuapp.com')
 			.setBasePath('/v1')
 			.setDescription('built NestJS, TypeORM, MongoDB')

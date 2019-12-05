@@ -22,16 +22,28 @@ import {
 } from '@nestjs/swagger'
 
 import { CreateDealDto } from './dto/create-deal.dto'
-import { FilterDealDto } from './dto/filter-deal.dto'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { AuthGuard } from '@nestjs/passport'
 import { ItemType, ServiceType, DealType } from './enum/deal.enum'
+import { ErrorResponseDto } from '../../modules/users/dto/error-response.dto'
+import { DealEntity } from './deal.entity'
 
+@ApiResponse({
+	status: 401,
+	description: 'Unauthorized.',
+	type: ErrorResponseDto
+})
+@ApiResponse({ status: 403, description: 'Forbidden.', type: ErrorResponseDto })
 @ApiUseTags('deals')
 @Controller('deals')
 export class DealsController {
 	constructor(private readonly dealsService: DealsService) {}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found records',
+		type: [DealEntity]
+	})
 	@ApiOperation({
 		title: 'Retrieve many Deals 👻'
 		// description: 'Aaa',
@@ -82,6 +94,11 @@ export class DealsController {
 		return this.dealsService.findAll(query)
 	}
 
+	@ApiResponse({
+		status: 200,
+		description: 'The found record',
+		type: DealEntity
+	})
 	@ApiOperation({
 		title: 'Retrieve one Deal 👻'
 	})
@@ -92,6 +109,11 @@ export class DealsController {
 
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
+	@ApiResponse({
+		status: 201,
+		description: 'The record has been successfully created.',
+		type: DealEntity
+	})
 	@ApiOperation({
 		title: 'Create one Deal 👻'
 	})

@@ -3,8 +3,7 @@ import { uuidv4 } from '../../utils'
 // import { Exclude, plainToClass } from 'class-transformer'
 import { ApiModelProperty } from '@nestjs/swagger'
 
-import { UserEntity } from '../users/user.entity'
-import { Position } from '../deals/entity/position.entity'
+import { PositionEntity } from '../deals/entity/position.entity'
 import { AddressType } from './enum/address.enum'
 
 @Entity({
@@ -28,7 +27,7 @@ export class AddressEntity {
 
 	@ApiModelProperty({ description: 'The location of the Address' })
 	@Column()
-	location: Position
+	location: PositionEntity
 
 	@ApiModelProperty({ description: 'The unitNumber of the Address' })
 	@Column()

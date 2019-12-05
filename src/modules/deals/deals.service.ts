@@ -9,7 +9,6 @@ import { CreateDealDto } from './dto/create-deal.dto'
 import { DealEntity } from './deal.entity'
 import { uploadFile } from '../../shared'
 import { ServiceType, ItemType } from './enum/deal.enum'
-import { Position } from './entity/position.entity'
 import { UserEntity } from '../../modules/users/user.entity'
 
 export type Deal = any
@@ -17,7 +16,7 @@ export type Deal = any
 @Injectable()
 export class DealsService {
 	async findAll(query): Promise<Deal[] | undefined> {
-		console.log(query)
+		// console.log(query)
 		const { dealType, serviceType, itemType, offset, limit } = query
 
 		const pipelineArray = []
@@ -72,7 +71,7 @@ export class DealsService {
 
 		pipelineArray.push(...createdBy)
 
-		console.log(dealType)
+		// console.log(dealType)
 
 		if (dealType) {
 			pipelineArray.push({ $match: { dealType } })

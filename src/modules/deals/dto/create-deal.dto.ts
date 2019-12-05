@@ -2,7 +2,7 @@ import { ApiModelProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsEnum, IsOptional } from 'class-validator'
 
 import { ItemType, ServiceType, PaymentType, DealType } from '../enum/deal.enum'
-import { Position } from '../entity/position.entity'
+import { PositionEntity } from '../entity/position.entity'
 
 export class CreateDealDto {
 	@ApiModelProperty({
@@ -68,31 +68,31 @@ export class CreateDealDto {
 
 	@ApiModelProperty({
 		default: {
-			latitude: '10.780230999999999',
-			longitude: '106.6645121'
+			latitude: 10.780230999999999,
+			longitude: 106.6645121
 		},
 		example: {
-			latitude: '10.780230999999999',
-			longitude: '106.6645121'
+			latitude: 10.780230999999999,
+			longitude: 106.6645121
 		},
 		description: 'The location of the Deal'
 	})
 	@IsNotEmpty()
-	readonly location: Position
+	readonly location: PositionEntity
 
 	@ApiModelProperty({
 		default: {
-			latitude: '10.780230999999999',
-			longitude: '106.6645121'
+			latitude: 10.780230999999999,
+			longitude: 106.6645121
 		},
 		example: {
-			latitude: '10.780230999999999',
-			longitude: '106.6645121'
+			latitude: 10.780230999999999,
+			longitude: 106.6645121
 		},
 		description: 'The destination of the Deal'
 	})
 	@IsNotEmpty() // I have no preference auto get location device
-	readonly destination: Position
+	readonly destination: PositionEntity
 
 	@ApiModelProperty({
 		default: 60 * 60 * 30,
