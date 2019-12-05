@@ -9,6 +9,7 @@ import { CreateDealDto } from './dto/create-deal.dto'
 import { DealEntity } from './deal.entity'
 import { uploadFile } from '../../shared'
 import { ServiceType, ItemType } from './enum/deal.enum'
+import { Position } from './interface/potisition.interface'
 
 export type Deal = any
 
@@ -105,7 +106,6 @@ export class DealsService {
 				new DealEntity(convertCreateDealDto)
 			)
 
-			return newDeal
 		} else {
 			const thumbnail = await uploadFile(file)
 
@@ -126,11 +126,8 @@ export class DealsService {
 				new DealEntity(convertCreateDealDto)
 			)
 
-			return newDeal
 		}
-	}
 
-	async update() {
-		return ''
+		return newDeal
 	}
 }
