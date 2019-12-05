@@ -18,7 +18,6 @@ import { uploadFile } from '../../shared'
 import { SPEAKEASY_SECRET, SPEAKEASY_STEP } from '../../environments'
 import { OtpResponseDto } from './dto/otp-response.dto'
 
-const validator = new Validator()
 export type User = any
 
 @Injectable()

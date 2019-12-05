@@ -4,7 +4,7 @@ import { uuidv4 } from '../../utils'
 import { ApiModelProperty } from '@nestjs/swagger'
 
 import { ItemType, ServiceType, PaymentType, DealType } from './enum/deal.enum'
-import { PositionEntity } from './entity/position.entity'
+import { Position } from './entity/position.entity'
 import { UserEntity } from '../users/user.entity'
 
 @Entity({
@@ -48,11 +48,11 @@ export class DealEntity {
 
 	@ApiModelProperty({ description: 'The location of the Deal' })
 	@Column()
-	location: PositionEntity
+	location: Position
 
 	@ApiModelProperty({ description: 'The destination of the Deal' })
 	@Column() // I have no preference auto get location device
-	destination: PositionEntity
+	destination: Position
 
 	@ApiModelProperty({ description: 'The expiredAt of the Deal' })
 	@Column() // 30m 1h 1h30 2h

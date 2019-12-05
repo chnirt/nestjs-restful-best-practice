@@ -19,6 +19,9 @@ import { BiddersModule } from './modules/bidders/bidders.module'
 import { AddressesModule } from './modules/addresses/addresses.module'
 import { ConnectionsModule } from './modules/connections/connections.module'
 import { BannersModule } from './modules/banners/banners.module'
+import { ClassesModule } from './modules/classes/classes.module';
+import { StudentsModule } from './modules/students/students.module';
+import { AttendanceModule } from './modules/attendance/attendance.module';
 
 @Module({
 	imports: [
@@ -44,7 +47,10 @@ import { BannersModule } from './modules/banners/banners.module'
 		ConnectionsModule,
 		EventsModule,
 		BiddersModule,
-		BannersModule
+		BannersModule,
+		ClassesModule,
+		StudentsModule,
+		AttendanceModule
 	],
 	controllers: [AppController],
 	providers: [AppService, EventsGateway]

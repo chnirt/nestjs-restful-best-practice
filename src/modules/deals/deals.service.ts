@@ -130,7 +130,7 @@ export class DealsService {
 			throw new ForbiddenException('The thumbnail is too large to upload')
 		}
 
-		// console.log(createDealDto.location)
+		// console.log(createDealDto)
 
 		if (createDealDto.items === 'Anything') {
 			convertCreateDealDto = {
@@ -147,7 +147,6 @@ export class DealsService {
 				new DealEntity(convertCreateDealDto)
 			)
 
-			return newDeal
 		} else {
 			if (!file) {
 				throw new ForbiddenException('Thumbnail not found.')
@@ -174,20 +173,21 @@ export class DealsService {
 				new DealEntity(convertCreateDealDto)
 			)
 
-			const createdBy = await getMongoRepository(UserEntity).findOne({
-				where: {
-					_id: newDeal.createdBy
-				},
-				select: ['_id', 'name', 'avatar']
-			})
-
-			newDeal.createdBy = {
-				_id: createdBy._id,
-				name: createdBy.name,
-				avatar: createdBy.avatar
-			}
-
-			return newDeal
 		}
+
+		const createdBy = await getMongoRepository(UserEntity).findOne({
+			where: {
+				_id: newDeal.createdBy
+			},
+			select: ['_id', 'name', 'avatar']
+		})
+
+		newDeal.createdBy = {
+			_id: createdBy._id,
+			name: createdBy.name,
+			avatar: createdBy.avatar
+		}
+
+		return newDeal
 	}
 }

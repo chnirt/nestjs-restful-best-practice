@@ -2,7 +2,7 @@ import { ApiModelProperty } from '@nestjs/swagger'
 import { IsNotEmpty, IsEnum, IsOptional } from 'class-validator'
 
 import { ConnectionType } from '../enum/connection.enum'
-import { PositionEntity } from '../../deals/entity/position.entity'
+import { Position } from '../../deals/entity/position.entity'
 
 export class CreateConnectionDto {
 	@ApiModelProperty({
@@ -15,17 +15,17 @@ export class CreateConnectionDto {
 
 	@ApiModelProperty({
 		default: {
-			latitude: '10.780230999999999',
-			longitude: '106.6645121'
+			latitude: 10.780230999999999,
+			longitude: 106.6645121
 		},
 		example: {
-			latitude: '10.780230999999999',
-			longitude: '106.6645121'
+			latitude: 10.780230999999999,
+			longitude: 106.6645121
 		},
 		description: 'The location of the Connection'
 	})
 	@IsNotEmpty()
-	readonly location: PositionEntity
+	readonly location: Position
 
 	@ApiModelProperty({
 		default: 69,

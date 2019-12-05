@@ -1,20 +1,25 @@
 import { ApiModelProperty } from '@nestjs/swagger'
 import { IsNotEmpty } from 'class-validator'
+import { Column } from 'typeorm'
 
-export class PositionEntity {
+export class Position {
 	@ApiModelProperty({
 		default: 10.780230999999999,
 		example: 10.780230999999999,
-		description: 'The latitude of the Position'
+		description: 'The latitude of the Position',
+		type: Number
 	})
-	// @IsNotEmpty()
+	@Column()
+	@IsNotEmpty()
 	latitude: number
 
 	@ApiModelProperty({
 		default: 106.6645121,
 		example: 106.6645121,
-		description: 'The longitude of the Position'
+		description: 'The longitude of the Position',
+		type: Number
 	})
-	// @IsNotEmpty()
+	@Column()
+	@IsNotEmpty()
 	longitude: number
 }

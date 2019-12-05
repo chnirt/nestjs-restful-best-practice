@@ -37,7 +37,7 @@ import { DealEntity } from './deal.entity'
 @ApiUseTags('deals')
 @Controller('deals')
 export class DealsController {
-	constructor(private readonly dealsService: DealsService) {}
+	constructor(private readonly dealsService: DealsService) { }
 
 	@ApiResponse({
 		status: 200,
