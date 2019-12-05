@@ -173,18 +173,21 @@ export class DealsService {
 				new DealEntity(convertCreateDealDto)
 			)
 
-			const createdBy = await getMongoRepository(UserEntity).findOne({
-				where: {
-					_id: newDeal.createdBy
-				},
-				select: ['_id', 'name', 'avatar']
-			})
-
-			newDeal.createdBy = {
-				_id: createdBy._id,
-				name: createdBy.name,
-				avatar: createdBy.avatar
-			}
 		}
+
+		const createdBy = await getMongoRepository(UserEntity).findOne({
+			where: {
+				_id: newDeal.createdBy
+			},
+			select: ['_id', 'name', 'avatar']
+		})
+
+		newDeal.createdBy = {
+			_id: createdBy._id,
+			name: createdBy.name,
+			avatar: createdBy.avatar
+		}
+
+		return newDeal
 	}
 }
