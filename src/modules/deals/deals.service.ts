@@ -9,7 +9,7 @@ import { CreateDealDto } from './dto/create-deal.dto'
 import { DealEntity } from './deal.entity'
 import { uploadFile } from '../../shared'
 import { ServiceType, ItemType } from './enum/deal.enum'
-import { Position } from './interface/potisition.interface'
+import { UserEntity } from '../../modules/users/user.entity'
 
 export type Deal = any
 
@@ -17,41 +17,76 @@ export type Deal = any
 export class DealsService {
 	async findAll(query): Promise<Deal[] | undefined> {
 		// console.log(query)
-		const { offset, limit } = query
+		const { dealType, serviceType, itemType, offset, limit } = query
 
-		if (offset < 1) {
-			throw new ForbiddenException('The offset must be greater than 0')
+		const pipelineArray = []
+
+		if (offset) {
+			if (offset < 1) {
+				throw new ForbiddenException('The offset must be greater than 0')
+			} else {
+				pipelineArray.push({
+					$skip: +offset
+				})
+			}
 		}
 
-		if (limit < 1) {
-			throw new ForbiddenException('The offset must be greater than 0')
+		if (limit) {
+			if (limit < 1) {
+				throw new ForbiddenException('The limit must be greater than 0')
+			} else {
+				pipelineArray.push({
+					$limit: +limit
+				})
+			}
+		}
+
+		const createdBy = [
+			{
+				$lookup: {
+					from: 'users',
+					localField: 'createdBy',
+					foreignField: '_id',
+					as: 'createdBy'
+				}
+			},
+			{
+				$project: {
+					'createdBy.email': 0,
+					'createdBy.password': 0,
+					'createdBy.referralCode': 0,
+					'createdBy.verified': 0,
+					'createdBy.createdAt': 0,
+					'createdBy.updatedAt': 0,
+					'createdBy.phone': 0
+				}
+			},
+			{
+				$unwind: {
+					path: '$createdBy',
+					preserveNullAndEmptyArrays: true
+				}
+			}
+		]
+
+		pipelineArray.push(...createdBy)
+
+		// console.log(dealType)
+
+		if (dealType) {
+			pipelineArray.push({ $match: { dealType } })
+		}
+
+		if (serviceType) {
+			pipelineArray.push({ $match: { serviceType } })
+		}
+
+		if (itemType) {
+			pipelineArray.push({ $match: { itemType } })
 		}
 
 		return getMongoRepository(DealEntity)
-			.aggregate([
-				{ $skip: +offset | 0 },
-				{ $limit: +limit | 100 },
-				{ $sort: { _id: -1 } },
-				{
-					$lookup: {
-						from: 'users',
-						localField: 'createdBy',
-						foreignField: '_id',
-						as: 'createdBy'
-					}
-				},
-				{
-					$project: {
-						'createdBy.email': 0,
-						'createdBy.password': 0,
-						'createdBy.referralCode': 0,
-						'createdBy.verified': 0,
-						'createdBy.createdAt': 0,
-						'createdBy.updatedAt': 0,
-						'createdBy.phone': 0
-					}
-				}
-			])
+			.aggregate(pipelineArray)
 			.toArray()
 	}
 
@@ -74,6 +109,7 @@ export class DealsService {
 			serviceType,
 			itemType,
 			location,
+			destination,
 			duration,
 			payment
 		} = createDealDto
@@ -82,22 +118,27 @@ export class DealsService {
 		let newDeal
 
 		if (
-			createDealDto.serviceType === ServiceType.FoodDelivery &&
-			createDealDto.itemType === ItemType.None
+			(createDealDto.serviceType === ServiceType.FoodDelivery &&
+				createDealDto.itemType === ItemType.None) ||
+			(createDealDto.serviceType !== ServiceType.FoodDelivery &&
+				createDealDto.itemType !== ItemType.None)
 		) {
 			throw new ForbiddenException('Service type and Item type is incorrect.')
 		}
 
 		if (file && file.size > 1024 * 1024 * 2) {
-			throw new ForbiddenException('The import file is too large to upload')
+			throw new ForbiddenException('The thumbnail is too large to upload')
 		}
 
-		if (createDealDto.itemType === ItemType.Anything) {
+		// console.log(createDealDto)
+
+		if (createDealDto.items === 'Anything') {
 			convertCreateDealDto = {
 				dealType,
 				serviceType,
 				itemType,
-				location,
+				location: JSON.parse(location.toString()),
+				destination: JSON.parse(destination.toString()),
 				duration,
 				payment
 			}
@@ -107,11 +148,17 @@ export class DealsService {
 			)
 
 		} else {
+			if (!file) {
+				throw new ForbiddenException('Thumbnail not found.')
+			}
+
 			const thumbnail = await uploadFile(file)
 
 			convertCreateDealDto = {
 				...createDealDto,
 				thumbnail,
+				location: JSON.parse(location.toString()),
+				destination: JSON.parse(destination.toString()),
 				expiredAt: +new Date() + 1000 * createDealDto.duration,
 				createdBy: _id
 			}
@@ -126,8 +173,18 @@ export class DealsService {
 				new DealEntity(convertCreateDealDto)
 			)
 
-		}
+			const createdBy = await getMongoRepository(UserEntity).findOne({
+				where: {
+					_id: newDeal.createdBy
+				},
+				select: ['_id', 'name', 'avatar']
+			})
 
-		return newDeal
+			newDeal.createdBy = {
+				_id: createdBy._id,
+				name: createdBy.name,
+				avatar: createdBy.avatar
+			}
+		}
 	}
 }

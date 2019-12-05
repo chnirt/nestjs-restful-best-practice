@@ -4,6 +4,7 @@ import { uuidv4 } from '../../utils'
 import { ApiModelProperty } from '@nestjs/swagger'
 
 import { UserEntity } from '../users/user.entity'
+import { ConnectionType } from './enum/connection.enum'
 
 @Entity({
 	name: 'connections',
@@ -16,9 +17,17 @@ export class ConnectionEntity {
 	@ObjectIdColumn()
 	_id: string
 
+	@ApiModelProperty({ description: 'The dealId of the Connection' })
+	@Column()
+	dealId: string
+
 	@ApiModelProperty({ description: 'The amount of the Connection' })
 	@Column()
 	amount: number
+
+	@ApiModelProperty({ description: 'The connectionType of the Connection' })
+	@Column()
+	connectionType: ConnectionType
 
 	@ApiModelProperty({ description: 'The createdBy of the Connection' })
 	@Column()
@@ -35,6 +44,7 @@ export class ConnectionEntity {
 		if (partial) {
 			Object.assign(this, partial)
 			this._id = this._id || uuidv4()
+			this.connectionType = ConnectionType.Connected
 			this.createdAt = this.createdAt || +new Date()
 			this.updatedAt = +new Date()
 		}

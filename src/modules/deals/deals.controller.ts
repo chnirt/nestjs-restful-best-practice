@@ -24,14 +24,15 @@ import {
 import { CreateDealDto } from './dto/create-deal.dto'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { AuthGuard } from '@nestjs/passport'
+import { ItemType, ServiceType, DealType } from './enum/deal.enum'
 
 @ApiUseTags('deals')
 @Controller('deals')
 export class DealsController {
-	constructor(private readonly dealsService: DealsService) {}
+	constructor(private readonly dealsService: DealsService) { }
 
 	@ApiOperation({
-		title: 'Retrieve many Deals'
+		title: 'Retrieve many Deals 👻'
 		// description: 'Aaa',
 		// operationId: 'aaaa'
 	})
@@ -48,12 +49,40 @@ export class DealsController {
 		required: false,
 		type: Number
 	})
+	@ApiImplicitQuery({
+		name: 'itemType',
+		description: 'The itemType of the Deal',
+		required: false,
+		type: ItemType,
+		enum: ['None', 'Meal', 'Drinks', 'Desserts', 'Snacks']
+	})
+	@ApiImplicitQuery({
+		name: 'serviceType',
+		description: 'The serviceType of the Deal',
+		required: false,
+		type: ServiceType,
+		enum: [
+			'FoodDelivery',
+			'Pickup',
+			'PharmacyPurchase',
+			'Queue',
+			'OverseasPurchase',
+			'Others'
+		]
+	})
+	@ApiImplicitQuery({
+		name: 'dealType',
+		description: 'The dealType of the Deal',
+		required: false,
+		type: DealType,
+		enum: ['Request', 'Offer']
+	})
 	findAll(@Query() query) {
 		return this.dealsService.findAll(query)
 	}
 
 	@ApiOperation({
-		title: 'Retrieve one Deal'
+		title: 'Retrieve one Deal 👻'
 	})
 	@Get(':id')
 	findOne(@Param('id') id: string) {
@@ -63,13 +92,13 @@ export class DealsController {
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
-		title: 'Create one Deal'
+		title: 'Create one Deal 👻'
 	})
 	@Post()
 	@ApiConsumes('multipart/form-data')
 	@ApiImplicitFile({
 		name: 'thumbnail',
-		required: true,
+		// required: true,
 		description: 'Send one file'
 	})
 	@UseInterceptors(FileInterceptor('thumbnail'))
