@@ -13,7 +13,8 @@ import {
 	LoggerMiddleware,
 	TimeoutInterceptor,
 	LoggingInterceptor,
-	HttpExceptionFilter
+	HttpExceptionFilter,
+	ErrorFilter
 } from './common'
 import { MyLogger } from './config'
 
@@ -65,6 +66,7 @@ async function bootstrap() {
 		app.useGlobalInterceptors(new LoggingInterceptor())
 		app.useGlobalInterceptors(new TimeoutInterceptor())
 		app.useGlobalFilters(new HttpExceptionFilter())
+		app.useGlobalFilters(new ErrorFilter())
 
 		// global nest setup
 		app.useGlobalPipes(new ValidationPipe())

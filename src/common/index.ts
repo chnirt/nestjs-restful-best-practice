@@ -1,3 +1,4 @@
+export * from './filters/errors.filter'
 export * from './filters/http-exception.filter'
 export * from './interceptors/exception.interceptor'
 export * from './interceptors/http-cache.interceptor'
