@@ -148,7 +148,9 @@ export class DealsService {
 					new DealEntity(convertCreateDealDto)
 				)
 			} else {
-				console.log(createDealDto)
+				console.log(JSON.parse(location.toString()))
+				console.log(JSON.parse(destination.toString()))
+				console.log(file)
 
 				if (!file) {
 					throw new ForbiddenException('Thumbnail not found.')
