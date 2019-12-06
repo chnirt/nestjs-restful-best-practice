@@ -120,6 +120,8 @@ export class DealsService {
 			let convertCreateDealDto
 			let newDeal
 
+			console.log('aaaa')
+
 			if (
 				(createDealDto.serviceType === ServiceType.FoodDelivery &&
 					createDealDto.itemType === ItemType.None) ||
@@ -133,7 +135,7 @@ export class DealsService {
 			// 	throw new ForbiddenException('The thumbnail is too large to upload')
 			// }
 
-			console.log(createDealDto)
+			// console.log(createDealDto)
 
 			if (createDealDto.items === 'Anything') {
 				convertCreateDealDto = {
@@ -150,8 +152,6 @@ export class DealsService {
 					new DealEntity(convertCreateDealDto)
 				)
 			} else {
-				// console.log(JSON.parse(location.toString()))
-				// console.log(JSON.parse(destination.toString()))
 				// console.log(file)
 
 				// if (!file) {
@@ -163,8 +163,6 @@ export class DealsService {
 				convertCreateDealDto = {
 					...createDealDto,
 					// thumbnail,
-					location: JSON.parse(location.toString()),
-					destination: JSON.parse(destination.toString()),
 					expiredAt: +new Date() + 1000 * createDealDto.duration,
 					createdBy: _id
 				}

@@ -6,6 +6,7 @@ import { ApiModelProperty } from '@nestjs/swagger'
 import { ItemType, ServiceType, PaymentType, DealType } from './enum/deal.enum'
 import { Position } from './entity/position.entity'
 import { UserEntity } from '../users/user.entity'
+import { CreatedByDto } from '../users/dto/created-by.dto'
 
 @Entity({
 	name: 'deals',
@@ -64,7 +65,7 @@ export class DealEntity {
 
 	@ApiModelProperty({ description: 'The createdBy of the Deal' })
 	@Column()
-	createdBy: UserEntity
+	createdBy: CreatedByDto
 
 	@ApiModelProperty({ description: 'The createdAt of the Deal' })
 	@Column()

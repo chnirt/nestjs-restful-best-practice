@@ -96,7 +96,7 @@ export class CreateDealDto {
 		description: 'The location of the Deal'
 	})
 	@IsNotEmpty()
-	readonly location: object
+	readonly location: Position
 
 	@ApiModelPropertyOptional({
 		default: {
@@ -110,7 +110,7 @@ export class CreateDealDto {
 		description: 'The destination of the Deal'
 	})
 	@IsNotEmpty() // I have no preference auto get location device
-	readonly destination: object
+	readonly destination: Position
 
 	@ApiModelProperty({
 		default: 60 * 60 * 30,
