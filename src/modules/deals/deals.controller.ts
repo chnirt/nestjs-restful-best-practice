@@ -27,6 +27,7 @@ import { AuthGuard } from '@nestjs/passport'
 import { ItemType, ServiceType, DealType } from './enum/deal.enum'
 import { ErrorResponseDto } from '../../modules/users/dto/error-response.dto'
 import { DealEntity } from './deal.entity'
+import { DealResponseDto } from './dto/deal-response.dto'
 
 @ApiResponse({
 	status: 401,
@@ -42,7 +43,7 @@ export class DealsController {
 	@ApiResponse({
 		status: 200,
 		description: 'The found records',
-		type: [DealEntity]
+		type: [DealResponseDto]
 	})
 	@ApiOperation({
 		title: 'Retrieve many Deals 👻'
@@ -97,7 +98,7 @@ export class DealsController {
 	@ApiResponse({
 		status: 200,
 		description: 'The found record',
-		type: DealEntity
+		type: DealResponseDto
 	})
 	@ApiOperation({
 		title: 'Retrieve one Deal 👻'
@@ -138,7 +139,7 @@ export class DealsController {
 	@ApiResponse({
 		status: 201,
 		description: 'The record has been successfully created.',
-		type: DealEntity
+		type: DealResponseDto
 	})
 	@ApiOperation({
 		title: 'Create one Deal 👻'

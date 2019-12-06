@@ -3,8 +3,8 @@ import { uuidv4 } from '../../utils'
 // import { Exclude, plainToClass } from 'class-transformer'
 import { ApiModelProperty } from '@nestjs/swagger'
 
-import { UserEntity } from '../users/user.entity'
 import { ConnectionType } from './enum/connection.enum'
+import { CreatedByDto } from '../../modules/users/dto/created-by.dto'
 
 @Entity({
 	name: 'connections',
@@ -31,7 +31,7 @@ export class ConnectionEntity {
 
 	@ApiModelProperty({ description: 'The createdBy of the Connection' })
 	@Column()
-	connectedBy: UserEntity
+	connectedBy: CreatedByDto
 
 	@ApiModelProperty({ description: 'The createdAt of the Connection' })
 	@Column()

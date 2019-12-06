@@ -42,6 +42,26 @@ export class DealsService {
 			}
 		}
 
+		const connections = [
+			{
+				$lookup: {
+					from: 'connections',
+					localField: '_id',
+					foreignField: 'dealId',
+					as: 'connections'
+				}
+			},
+			{
+				$addFields: {
+					connections: {
+						$size: '$connections'
+					}
+				}
+			}
+		]
+
+		pipelineArray.push(...connections)
+
 		const createdBy = [
 			{
 				$lookup: {
@@ -86,6 +106,8 @@ export class DealsService {
 			pipelineArray.push({ $match: { itemType } })
 		}
 
+		console.log()
+
 		return getMongoRepository(DealEntity)
 			.aggregate(pipelineArray)
 			.toArray()
@@ -119,8 +141,6 @@ export class DealsService {
 
 			let convertCreateDealDto
 			let newDeal
-
-			console.log('aaaa')
 
 			if (
 				(createDealDto.serviceType === ServiceType.FoodDelivery &&
@@ -185,11 +205,7 @@ export class DealsService {
 				select: ['_id', 'name', 'avatar']
 			})
 
-			newDeal.createdBy = {
-				_id: createdBy._id,
-				name: createdBy.name,
-				avatar: createdBy.avatar
-			}
+			newDeal.createdBy = createdBy
 
 			return newDeal
 		} catch (error) {

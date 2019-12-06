@@ -1,6 +1,8 @@
 import { Injectable, ForbiddenException } from '@nestjs/common'
 import { getMongoRepository } from 'typeorm'
 import { ConnectionEntity } from './connection.entity'
+import { UserEntity } from '../../modules/users/user.entity'
+import { DealEntity } from '../../modules/deals/deal.entity'
 
 export type Connection = any
 
@@ -26,9 +28,17 @@ export class ConnectionsService {
 		return connections
 	}
 
-	async insert(dealId: string, req: any): Promise<boolean> {
+	async insert(dealId: string, req: any): Promise<Connection> {
 		const { user } = req
 		const { _id } = user
+
+		const foundDeal = await getMongoRepository(DealEntity).findOne({
+			_id: dealId,
+		})
+
+		if (!foundDeal) {
+			throw new ForbiddenException('Deal not found')
+		}
 
 		const foundAddress = await getMongoRepository(ConnectionEntity).findOne({
 			dealId,
@@ -43,6 +53,15 @@ export class ConnectionsService {
 			new ConnectionEntity({ dealId, connectedBy: _id })
 		)
 
-		return newConnection && true
+		const connectedBy = await getMongoRepository(UserEntity).findOne({
+			where: {
+				_id: newConnection.connectedBy
+			},
+			select: ['_id', 'name', 'avatar']
+		})
+
+		newConnection.connectedBy = connectedBy
+
+		return newConnection
 	}
 }
