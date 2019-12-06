@@ -30,6 +30,7 @@ import { uploadFile } from './shared/upload'
 import { LoginResponseDto } from './modules/users/dto/login-response.dto'
 import { ErrorResponseDto } from './modules/users/dto/error-response.dto'
 import { UserEntity } from './modules/users/user.entity'
+import { UploadResponseDto } from './modules/users/dto/upload-response.dto'
 
 @ApiResponse({ status: 401, description: 'Unauthorized.', type: ErrorResponseDto })
 @ApiResponse({ status: 403, description: 'Forbidden.', type: ErrorResponseDto })
@@ -80,7 +81,7 @@ export class AppController {
 	@ApiResponse({
 		status: 201,
 		description: 'The record has been successfully created.',
-		type: String
+		type: UploadResponseDto
 	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
@@ -94,10 +95,10 @@ export class AppController {
 		required: true,
 	})
 	@UseInterceptors(FileInterceptor('file'))
-	async uploadFile(@UploadedFile() file): Promise<string> {
-		const path = await uploadFile(file)
+	async uploadFile(@UploadedFile() file): Promise<UploadResponseDto> {
+		const url = await uploadFile(file)
 
-		return path
+		return { url }
 	}
 
 	@ApiBearerAuth()
