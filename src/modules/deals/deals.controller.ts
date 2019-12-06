@@ -132,4 +132,31 @@ export class DealsController {
 	) {
 		return this.dealsService.insert(createDealDto, file, req)
 	}
+
+	@ApiResponse({
+		status: 201,
+		description: 'The record has been successfully created.',
+		type: DealEntity
+	})
+	@ApiOperation({
+		title: 'Create one Deal v1 👻'
+	})
+	@Post('v1')
+	@ApiConsumes('multipart/form-data')
+	@ApiImplicitFile({
+		name: 'thumbnail',
+		// required: true,
+		description: 'Send one file'
+	})
+	@UseInterceptors(FileInterceptor('thumbnail'))
+	insert1(
+		@Body() createDealDto: CreateDealDto,
+		@UploadedFile() file,
+		@Request() req
+	) {
+		return {
+			createDealDto,
+			file,
+		}
+	}
 }
