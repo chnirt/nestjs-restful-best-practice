@@ -15,6 +15,7 @@ export type Deal = any
 
 @Injectable()
 export class DealsService {
+	// TODO:
 	async findAll(query): Promise<Deal[] | undefined> {
 		// console.log(query)
 		const { dealType, serviceType, itemType, offset, limit } = query
@@ -100,7 +101,8 @@ export class DealsService {
 		return foundDeal
 	}
 
-	async insert(createDealDto: CreateDealDto, file: any, req: any) {
+	// TODO:
+	async insert(createDealDto: CreateDealDto, req: any) {
 		// console.log(createDealDto, file, req.user._id)
 		try {
 			const { user } = req
@@ -127,9 +129,9 @@ export class DealsService {
 				throw new ForbiddenException('Service type and Item type is incorrect.')
 			}
 
-			if (file && file.size > 1024 * 1024 * 2) {
-				throw new ForbiddenException('The thumbnail is too large to upload')
-			}
+			// if (file && file.size > 1024 * 1024 * 2) {
+			// 	throw new ForbiddenException('The thumbnail is too large to upload')
+			// }
 
 			console.log(createDealDto)
 
@@ -148,19 +150,19 @@ export class DealsService {
 					new DealEntity(convertCreateDealDto)
 				)
 			} else {
-				console.log(JSON.parse(location.toString()))
-				console.log(JSON.parse(destination.toString()))
-				console.log(file)
+				// console.log(JSON.parse(location.toString()))
+				// console.log(JSON.parse(destination.toString()))
+				// console.log(file)
 
-				if (!file) {
-					throw new ForbiddenException('Thumbnail not found.')
-				}
+				// if (!file) {
+				// 	throw new ForbiddenException('Thumbnail not found.')
+				// }
 
-				const thumbnail = await uploadFile(file)
+				// const thumbnail = await uploadFile(file)
 
 				convertCreateDealDto = {
 					...createDealDto,
-					thumbnail,
+					// thumbnail,
 					location: JSON.parse(location.toString()),
 					destination: JSON.parse(destination.toString()),
 					expiredAt: +new Date() + 1000 * createDealDto.duration,

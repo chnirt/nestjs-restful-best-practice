@@ -14,7 +14,6 @@ import {
 	TimeoutInterceptor,
 	LoggingInterceptor,
 	HttpExceptionFilter,
-	ErrorFilter
 } from './common'
 import { MyLogger } from './config'
 
@@ -66,7 +65,6 @@ async function bootstrap() {
 		app.useGlobalInterceptors(new LoggingInterceptor())
 		app.useGlobalInterceptors(new TimeoutInterceptor())
 		app.useGlobalFilters(new HttpExceptionFilter())
-		app.useGlobalFilters(new ErrorFilter())
 
 		// global nest setup
 		app.useGlobalPipes(new ValidationPipe())
@@ -109,17 +107,17 @@ async function bootstrap() {
 
 		NODE_ENV !== 'production'
 			? Logger.log(
-					`🚀  Server ready at https://${DOMAIN!}:${chalk
-						.hex('#87e8de')
-						.bold(`${PORT!}`)}`,
-					'Bootstrap'
-			  )
+				`🚀  Server ready at https://${DOMAIN!}:${chalk
+					.hex('#87e8de')
+					.bold(`${PORT!}`)}`,
+				'Bootstrap'
+			)
 			: Logger.log(
-					`🚀  Server is listening on port ${chalk
-						.hex('#87e8de')
-						.bold(`${PORT!}`)}`,
-					'Bootstrap'
-			  )
+				`🚀  Server is listening on port ${chalk
+					.hex('#87e8de')
+					.bold(`${PORT!}`)}`,
+				'Bootstrap'
+			)
 	} catch (error) {
 		// logger.error(error)
 		Logger.error(`❌  Error starting server, ${error}`, '', 'Bootstrap', false)

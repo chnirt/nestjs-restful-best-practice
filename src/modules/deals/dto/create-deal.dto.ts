@@ -70,10 +70,19 @@ export class CreateDealDto {
 		default: 'Tâm Ký',
 		example: 'Tâm Ký',
 		required: false,
-		description: 'The shop name of the Deal'
+		description: 'The shopName of the Deal'
 	})
 	@IsOptional()
 	readonly shopName: string
+
+	@ApiModelProperty({
+		default: 'https://xxx.xxx',
+		example: 'https://xxx.xxx',
+		required: false,
+		description: 'The thumbnail of the Deal'
+	})
+	@IsOptional()
+	thumbnail: string
 
 	@ApiModelPropertyOptional({
 		default: {

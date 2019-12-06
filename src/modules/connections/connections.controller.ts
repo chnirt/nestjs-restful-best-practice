@@ -31,34 +31,39 @@ import { ErrorResponseDto } from '../../modules/users/dto/error-response.dto'
 @ApiUseTags('connections')
 @Controller('connections')
 export class ConnectionsController {
-	constructor(private readonly connectionsService: ConnectionsService) {}
+	constructor(private readonly connectionsService: ConnectionsService) { }
 
-	@ApiResponse({
-		status: 200,
-		description: 'The found records',
-		type: [ConnectionEntity]
-	})
-	@ApiOperation({
-		title: 'Retrieve many Connections 👻'
-		// description: 'Aaa',
-		// operationId: 'aaaa'
-	})
 	@Get()
-	@ApiImplicitQuery({
-		name: 'limit',
-		description: 'The maximum number of transactions to return',
-		required: false,
-		type: Number
-	})
-	@ApiImplicitQuery({
-		name: 'offset',
-		description: 'The maximum number of transactions to skip',
-		required: false,
-		type: Number
-	})
-	findAll(@Query() query, @Request() req): Promise<Connection[]> {
-		return this.connectionsService.findAll(query, req)
+	findAll(@Query() query, @Request() req) {
+		console.log('hello')
+		return null
 	}
+	// @ApiResponse({
+	// 	status: 200,
+	// 	description: 'The found records',
+	// 	type: [ConnectionEntity]
+	// })
+	// @ApiOperation({
+	// 	title: 'Retrieve many Connections 👻'
+	// 	// description: 'Aaa',
+	// 	// operationId: 'aaaa'
+	// })
+	// @Get()
+	// @ApiImplicitQuery({
+	// 	name: 'limit',
+	// 	description: 'The maximum number of transactions to return',
+	// 	required: false,
+	// 	type: Number
+	// })
+	// @ApiImplicitQuery({
+	// 	name: 'offset',
+	// 	description: 'The maximum number of transactions to skip',
+	// 	required: false,
+	// 	type: Number
+	// })
+	// findAll(@Query() query, @Request() req): Promise<Connection[]> {
+	// 	return this.connectionsService.findAll(query, req)
+	// }
 
 	@ApiResponse({
 		status: 201,
