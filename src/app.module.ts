@@ -19,9 +19,11 @@ import { BiddersModule } from './modules/bidders/bidders.module'
 import { AddressesModule } from './modules/addresses/addresses.module'
 import { ConnectionsModule } from './modules/connections/connections.module'
 import { BannersModule } from './modules/banners/banners.module'
-import { ClassesModule } from './modules/classes/classes.module';
-import { StudentsModule } from './modules/students/students.module';
-import { AttendanceModule } from './modules/attendance/attendance.module';
+import { ClassesModule } from './modules/classes/classes.module'
+import { StudentsModule } from './modules/students/students.module'
+import { AttendanceModule } from './modules/attendance/attendance.module'
+import { ChatsModule } from './modules/chats/chats.module'
+import { ChatsGateway } from './modules/chats/chats.gateway'
 
 @Module({
 	imports: [
@@ -50,10 +52,11 @@ import { AttendanceModule } from './modules/attendance/attendance.module';
 		BannersModule,
 		ClassesModule,
 		StudentsModule,
-		AttendanceModule
+		AttendanceModule,
+		ChatsModule
 	],
 	controllers: [AppController],
-	providers: [AppService, EventsGateway]
+	providers: [AppService, EventsGateway, ChatsGateway]
 })
 export class AppModule implements OnModuleInit {
 	onModuleInit() {

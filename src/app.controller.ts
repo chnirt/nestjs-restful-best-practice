@@ -32,7 +32,11 @@ import { ErrorResponseDto } from './modules/users/dto/error-response.dto'
 import { UserEntity } from './modules/users/user.entity'
 import { UploadResponseDto } from './modules/users/dto/upload-response.dto'
 
-@ApiResponse({ status: 401, description: 'Unauthorized.', type: ErrorResponseDto })
+@ApiResponse({
+	status: 401,
+	description: 'Unauthorized.',
+	type: ErrorResponseDto
+})
 @ApiResponse({ status: 403, description: 'Forbidden.', type: ErrorResponseDto })
 @ApiUseTags('basic')
 @Controller()
@@ -41,7 +45,7 @@ export class AppController {
 	constructor(
 		private readonly appService: AppService,
 		private readonly authService: AuthService
-	) { }
+	) {}
 
 	@Get()
 	getHello(): string {
@@ -92,7 +96,7 @@ export class AppController {
 	@ApiConsumes('multipart/form-data')
 	@ApiImplicitFile({
 		name: 'file',
-		required: true,
+		required: true
 	})
 	@UseInterceptors(FileInterceptor('file'))
 	async uploadFile(@UploadedFile() file): Promise<UploadResponseDto> {
@@ -120,8 +124,6 @@ export class AppController {
 		return ['path', 'path1']
 	}
 
-	@ApiBearerAuth()
-	@UseGuards(AuthGuard('jwt'))
 	@ApiOperation({
 		title: 'Retrieve one File'
 		// deprecated: true
