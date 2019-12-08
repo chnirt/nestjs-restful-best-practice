@@ -17,9 +17,9 @@ export class ConnectionEntity {
 	@ObjectIdColumn()
 	_id: string
 
-	@ApiModelProperty({ description: 'The dealId of the Connection' })
+	@ApiModelProperty({ description: 'The deal of the Connection' })
 	@Column()
-	dealId: string
+	deal: string
 
 	@ApiModelProperty({ description: 'The amount of the Connection' })
 	@Column()

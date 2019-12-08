@@ -13,27 +13,136 @@ export class ConnectionsService {
 		const { user } = req
 		const { _id } = user
 
-		if (offset < 1) {
-			throw new ForbiddenException('The offset must be greater than 0')
+		const pipelineArray = []
+
+		if (offset) {
+			if (offset < 1) {
+				throw new ForbiddenException('The offset must be greater than 0')
+			} else {
+				pipelineArray.push({
+					$skip: +offset
+				})
+			}
 		}
 
-		if (limit < 1) {
-			throw new ForbiddenException('The offset must be greater than 0')
+		if (limit) {
+			if (limit < 1) {
+				throw new ForbiddenException('The limit must be greater than 0')
+			} else {
+				pipelineArray.push({
+					$limit: +limit
+				})
+			}
 		}
 
-		const connections = await getMongoRepository(ConnectionEntity).find({
-			connectedBy: _id
-		})
+		const deal = [
+			{
+				$lookup: {
+					from: 'deals',
+					localField: 'deal',
+					foreignField: '_id',
+					as: 'deal'
+				}
+			},
+			{
+				$project: {
+					'deal.serviceType': 0,
+					'deal.itemType': 0,
+					'deal.description': 0,
+					'deal.shopName': 0,
+					'deal.location': 0,
+					'deal.destination': 0,
+					'deal.payment': 0,
+					'deal.expiredAt': 0,
+					'deal.createdAt': 0,
+					'deal.updatedAt': 0
+				}
+			},
+			{
+				$unwind: {
+					path: '$deal',
+					preserveNullAndEmptyArrays: true
+				}
+			}
+		]
 
-		return connections
+		const match = [
+			{
+				$match: {
+					$or: [{ connectedBy: _id }, { 'deal.createdBy': _id }]
+				}
+			}
+		]
+
+		const dealCreatedBy = [
+			{
+				$lookup: {
+					from: 'users',
+					localField: 'deal.createdBy',
+					foreignField: '_id',
+					as: 'deal.createdBy'
+				}
+			},
+			{
+				$project: {
+					'deal.createdBy.email': 0,
+					'deal.createdBy.password': 0,
+					'deal.createdBy.referralCode': 0,
+					'deal.createdBy.verified': 0,
+					'deal.createdBy.createdAt': 0,
+					'deal.createdBy.updatedAt': 0,
+					'deal.createdBy.phone': 0
+				}
+			},
+			{
+				$unwind: {
+					path: '$deal.createdBy',
+					preserveNullAndEmptyArrays: true
+				}
+			}
+		]
+
+		const createdBy = [
+			{
+				$lookup: {
+					from: 'users',
+					localField: 'connectedBy',
+					foreignField: '_id',
+					as: 'connectedBy'
+				}
+			},
+			{
+				$project: {
+					'connectedBy.email': 0,
+					'connectedBy.password': 0,
+					'connectedBy.referralCode': 0,
+					'connectedBy.verified': 0,
+					'connectedBy.createdAt': 0,
+					'connectedBy.updatedAt': 0,
+					'connectedBy.phone': 0
+				}
+			},
+			{
+				$unwind: {
+					path: '$connectedBy',
+					preserveNullAndEmptyArrays: true
+				}
+			}
+		]
+
+		pipelineArray.push(...deal, ...match, ...dealCreatedBy, ...createdBy)
+
+		return await getMongoRepository(ConnectionEntity)
+			.aggregate(pipelineArray)
+			.toArray()
 	}
 
-	async insert(dealId: string, req: any): Promise<Connection> {
+	async insert(deal: string, req: any): Promise<Connection> {
 		const { user } = req
 		const { _id } = user
 
 		const foundDeal = await getMongoRepository(DealEntity).findOne({
-			_id: dealId,
+			_id: deal
 		})
 
 		if (!foundDeal) {
@@ -41,7 +150,7 @@ export class ConnectionsService {
 		}
 
 		const foundAddress = await getMongoRepository(ConnectionEntity).findOne({
-			dealId,
+			deal,
 			connectedBy: _id
 		})
 
@@ -50,7 +159,7 @@ export class ConnectionsService {
 		}
 
 		const newConnection = await getMongoRepository(ConnectionEntity).save(
-			new ConnectionEntity({ dealId, connectedBy: _id })
+			new ConnectionEntity({ deal, connectedBy: _id })
 		)
 
 		const connectedBy = await getMongoRepository(UserEntity).findOne({

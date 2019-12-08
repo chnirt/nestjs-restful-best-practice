@@ -12,19 +12,48 @@ export class AddressesService {
 		const { user } = req
 		const { _id } = user
 
-		if (offset < 1) {
-			throw new ForbiddenException('The offset must be greater than 0')
+		const pipelineArray = []
+
+		if (offset) {
+			if (offset < 1) {
+				throw new ForbiddenException('The offset must be greater than 0')
+			} else {
+				pipelineArray.push({
+					$skip: +offset
+				})
+			}
 		}
 
-		if (limit < 1) {
-			throw new ForbiddenException('The offset must be greater than 0')
+		if (limit) {
+			if (limit < 1) {
+				throw new ForbiddenException('The limit must be greater than 0')
+			} else {
+				pipelineArray.push({
+					$limit: +limit
+				})
+			}
 		}
 
-		const addresses = await getMongoRepository(AddressEntity).find({
-			createdBy: _id
-		})
+		const match = [
+			{
+				$match: {
+					createdBy: _id
+				}
+			},
+			{
+				$project: {
+					createdBy: 0,
+					createdAt: 0,
+					updatedAt: 0
+				}
+			}
+		]
 
-		return addresses
+		pipelineArray.push(...match)
+
+		return await getMongoRepository(AddressEntity)
+			.aggregate(pipelineArray)
+			.toArray()
 	}
 
 	async insert(createAddressDto: CreateAddressDto, req: any): Promise<boolean> {

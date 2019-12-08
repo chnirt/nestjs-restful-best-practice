@@ -8,10 +8,10 @@ export class CreateConnectionDto {
 	@ApiModelProperty({
 		default: 'xxxx-xxxx-xxxx-xxxx',
 		example: 'xxxx-xxxx-xxxx-xxxx',
-		description: 'The dealId of the Connection'
+		description: 'The deal of the Connection'
 	})
 	@IsOptional()
-	readonly dealId: string
+	readonly deal: string
 
 	@ApiModelProperty({
 		default: {

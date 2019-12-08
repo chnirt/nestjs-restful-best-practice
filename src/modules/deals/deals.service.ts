@@ -60,8 +60,6 @@ export class DealsService {
 			}
 		]
 
-		pipelineArray.push(...connections)
-
 		const createdBy = [
 			{
 				$lookup: {
@@ -90,7 +88,7 @@ export class DealsService {
 			}
 		]
 
-		pipelineArray.push(...createdBy)
+		pipelineArray.push(...connections, ...createdBy)
 
 		// console.log(dealType)
 
@@ -106,9 +104,7 @@ export class DealsService {
 			pipelineArray.push({ $match: { itemType } })
 		}
 
-		console.log()
-
-		return getMongoRepository(DealEntity)
+		return await getMongoRepository(DealEntity)
 			.aggregate(pipelineArray)
 			.toArray()
 	}
