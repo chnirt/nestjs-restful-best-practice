@@ -3,7 +3,7 @@ import { ApiModelProperty } from '@nestjs/swagger'
 import { uuidv4 } from '../../../utils'
 
 @Entity({
-	name: 'Students',
+	name: 'students',
 	orderBy: {
 		createdAt: 'ASC'
 	}
@@ -13,17 +13,17 @@ export class StudentEntity {
 	@ObjectIdColumn()
 	_id: string
 
+	@ApiModelProperty({ description: 'The classId of the Student' })
+	@Column()
+	classId: string
+
 	@ApiModelProperty({ description: 'The stt of the Student' })
 	@Column()
 	stt: number
 
-	@ApiModelProperty({ description: 'The name of the Student' })
+	@ApiModelProperty({ description: 'The fullname of the Student' })
 	@Column()
-	fullname: string
-
-	@ApiModelProperty({ description: 'The school of the Student' })
-	@Column()
-	school: string
+	fullName: string
 
 	@ApiModelProperty({ description: 'The createdAt of the Student' })
 	@Column()
