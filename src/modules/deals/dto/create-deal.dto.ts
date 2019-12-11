@@ -1,17 +1,8 @@
-import {
-	ApiModelProperty,
-	ApiConsumes,
-	ApiModelPropertyOptional
-} from '@nestjs/swagger'
-import {
-	IsNotEmpty,
-	IsEnum,
-	IsOptional,
-	ValidateNested,
-	IsObject
-} from 'class-validator'
+import { ApiModelProperty, ApiModelPropertyOptional } from '@nestjs/swagger'
+import { IsNotEmpty, IsEnum, IsOptional } from 'class-validator'
 
 import { ItemType, ServiceType, PaymentType, DealType } from '../enum/deal.enum'
+import { Position } from '../entity/position.entity'
 
 export class CreateDealDto {
 	@ApiModelProperty({

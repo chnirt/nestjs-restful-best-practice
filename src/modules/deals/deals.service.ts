@@ -4,12 +4,27 @@ import {
 	ForbiddenException
 } from '@nestjs/common'
 import { getMongoRepository } from 'typeorm'
+import * as geolib from 'geolib'
 
 import { CreateDealDto } from './dto/create-deal.dto'
 import { DealEntity } from './deal.entity'
-import { uploadFile } from '../../shared'
 import { ServiceType, ItemType } from './enum/deal.enum'
 import { UserEntity } from '../../modules/users/user.entity'
+
+const from = {
+	latitude: 10.783,
+	longitude: 106.692
+}
+const to = {
+	latitude: 10.807,
+	longitude: 106.709
+}
+
+console.log(
+	'You are ',
+	geolib.getDistance(from, to),
+	`meters away from ${from}`
+)
 
 export type Deal = any
 

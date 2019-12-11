@@ -28,6 +28,7 @@ import { ItemType, ServiceType, DealType } from './enum/deal.enum'
 import { ErrorResponseDto } from '../../modules/users/dto/error-response.dto'
 import { DealEntity } from './deal.entity'
 import { DealResponseDto } from './dto/deal-response.dto'
+import { Position } from './entity/position.entity'
 
 @ApiResponse({
 	status: 401,
@@ -38,7 +39,7 @@ import { DealResponseDto } from './dto/deal-response.dto'
 @ApiUseTags('deals')
 @Controller('deals')
 export class DealsController {
-	constructor(private readonly dealsService: DealsService) { }
+	constructor(private readonly dealsService: DealsService) {}
 
 	@ApiResponse({
 		status: 200,
@@ -50,7 +51,7 @@ export class DealsController {
 		// description: 'Aaa',
 		// operationId: 'aaaa'
 	})
-	@Get()
+	@Get(':searchIn')
 	@ApiImplicitQuery({
 		name: 'limit',
 		description: 'The maximum number of transactions to return',
@@ -91,7 +92,8 @@ export class DealsController {
 		type: DealType,
 		enum: ['Request', 'Offer']
 	})
-	findAll(@Query() query) {
+	findAll(@Param('searchIn') searchIn: string, @Query() query) {
+		console.log('sdasd', searchIn)
 		return this.dealsService.findAll(query)
 	}
 
@@ -119,10 +121,7 @@ export class DealsController {
 		title: 'Create one Deal 👻'
 	})
 	@Post()
-	insert(
-		@Body() createDealDto: CreateDealDto,
-		@Request() req
-	) {
+	insert(@Body() createDealDto: CreateDealDto, @Request() req) {
 		return this.dealsService.insert(createDealDto, req)
 	}
 }

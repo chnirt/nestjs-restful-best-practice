@@ -2,6 +2,7 @@ import { Entity, ObjectIdColumn, Column } from 'typeorm'
 import { uuidv4 } from '../../utils'
 import { Exclude, plainToClass } from 'class-transformer'
 import { ApiModelProperty } from '@nestjs/swagger'
+import { Position } from '../../modules/deals/entity/position.entity'
 
 @Entity({
 	name: 'users',
@@ -35,7 +36,7 @@ export class UserEntity {
 
 	@ApiModelProperty({ description: 'The search location of the User' })
 	@Column()
-	searchLocation: string
+	searchIn: Position
 
 	// @Column()
 	// countryCode: string; // Vietname +84
