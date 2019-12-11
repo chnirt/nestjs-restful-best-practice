@@ -17,6 +17,10 @@ export class AttendanceEntity {
 	@Column()
 	studentId: string
 
+	@ApiModelProperty({ description: 'The present of the Attendance' })
+	@Column()
+	present: boolean
+
 	@ApiModelProperty({ description: 'The createdAt of the Attendance' })
 	@Column()
 	createdAt: number

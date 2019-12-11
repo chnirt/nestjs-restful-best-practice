@@ -1,16 +1,16 @@
-import { Controller, Get, Body, Param, Put, Delete, Post } from '@nestjs/common';
-import { StudentsService } from './students.service';
-import { ApiResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
-import { StudentEntity } from './entity/student.entity';
-import { CreateStudentDto } from './dto/create-student.dto';
-import { ReplaceStudentDto } from './dto/replace-student.dto';
+import { Controller, Get, Body, Param, Put, Delete, Post } from '@nestjs/common'
+import { StudentsService } from './students.service'
+import { ApiResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger'
+import { StudentEntity } from './entity/student.entity'
+import { CreateStudentDto } from './dto/create-student.dto'
+import { ReplaceStudentDto } from './dto/replace-student.dto'
 
 // @ApiBearerAuth()
 // @UseGuards(AuthGuard('jwt'))
 @ApiUseTags('students')
 @Controller('students')
 export class StudentsController {
-    constructor(private readonly studentsService: StudentsService) {}
+	constructor(private readonly studentsService: StudentsService) {}
 
 	@ApiResponse({
 		status: 200,
@@ -57,7 +57,10 @@ export class StudentsController {
 		title: 'Replace one Student 👾'
 	})
 	@Put(':id')
-	replace(@Param('id') id: string, @Body() replaceStudentDto: ReplaceStudentDto) {
+	replace(
+		@Param('id') id: string,
+		@Body() replaceStudentDto: ReplaceStudentDto
+	) {
 		return this.studentsService.findOneAndReplace(id, replaceStudentDto)
 	}
 
