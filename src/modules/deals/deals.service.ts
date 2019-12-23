@@ -224,9 +224,11 @@ export class DealsService {
 		}
 	}
 
-	async findByUserId(req: any): Promise<Deal[] | undefined> {
+	async findByUserId(req: any, query: any): Promise<Deal[] | undefined> {
 		const { user } = req
 		const { _id } = user
+
+		const { dealType } = query
 
 		console.log(_id)
 
@@ -234,6 +236,10 @@ export class DealsService {
 
 		if (_id) {
 			pipelineArray.push({ $match: { createdBy: _id } })
+		}
+
+		if (dealType) {
+			pipelineArray.push({ $match: { dealType } })
 		}
 
 		const connections = [

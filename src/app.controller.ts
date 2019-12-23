@@ -9,7 +9,8 @@ import {
 	UseInterceptors,
 	UploadedFile,
 	CacheInterceptor,
-	Body
+	Body,
+	Query
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import {
@@ -19,7 +20,8 @@ import {
 	ApiImplicitBody,
 	ApiUseTags,
 	ApiOperation,
-	ApiResponse
+	ApiResponse,
+	ApiImplicitQuery
 } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { AppService } from './app.service'
@@ -33,6 +35,7 @@ import { UserEntity } from './modules/users/user.entity'
 import { UploadResponseDto } from './modules/users/dto/upload-response.dto'
 import { DealsService } from './modules/deals/deals.service'
 import { DealResponseDto } from './modules/deals/dto/deal-response.dto'
+import { DealType } from './modules/deals/enum/deal.enum'
 
 @ApiResponse({
 	status: 401,
@@ -96,8 +99,15 @@ export class AppController {
 		title: 'Retrieve one My deal 👻'
 	})
 	@Get('myDeal')
-	getMyDeal(@Request() req) {
-		const myDeal = this.dealService.findByUserId(req)
+	@ApiImplicitQuery({
+		name: 'dealType',
+		description: 'The dealType of the Deal',
+		required: false,
+		type: DealType,
+		enum: ['Request', 'Offer']
+	})
+	getMyDeal(@Request() req, @Query() query) {
+		const myDeal = this.dealService.findByUserId(req, query)
 		return myDeal
 	}
 
