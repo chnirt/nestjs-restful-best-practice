@@ -31,6 +31,7 @@ import { LoginResponseDto } from './modules/users/dto/login-response.dto'
 import { ErrorResponseDto } from './modules/users/dto/error-response.dto'
 import { UserEntity } from './modules/users/user.entity'
 import { UploadResponseDto } from './modules/users/dto/upload-response.dto'
+import { DealsService } from './modules/deals/deals.service'
 
 @ApiResponse({
 	status: 401,
@@ -44,7 +45,8 @@ import { UploadResponseDto } from './modules/users/dto/upload-response.dto'
 export class AppController {
 	constructor(
 		private readonly appService: AppService,
-		private readonly authService: AuthService
+		private readonly authService: AuthService,
+		private readonly dealService: DealsService
 	) {}
 
 	@Get()
@@ -80,6 +82,22 @@ export class AppController {
 	@Get('profile')
 	getProfile(@Request() req) {
 		return req.user
+	}
+
+	@ApiResponse({
+		status: 200,
+		description: 'The found My deal',
+		type: UserEntity
+	})
+	@ApiBearerAuth()
+	@UseGuards(AuthGuard('jwt'))
+	@ApiOperation({
+		title: 'Retrieve one My deal 👻'
+	})
+	@Get('myDeal')
+	getMyDeal(@Request() req) {
+		const myDeal = this.dealService.findByUserId(req)
+		return myDeal
 	}
 
 	@ApiResponse({

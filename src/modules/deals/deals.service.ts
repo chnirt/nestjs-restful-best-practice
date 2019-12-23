@@ -223,4 +223,69 @@ export class DealsService {
 			throw new Error(error)
 		}
 	}
+
+	async findByUserId(req: any): Promise<Deal[] | undefined> {
+		const { user } = req
+		const { _id } = user
+
+		console.log(_id)
+
+		const pipelineArray = []
+
+		if (_id) {
+			pipelineArray.push({ $match: { createdBy: _id } })
+		}
+
+		const connections = [
+			{
+				$lookup: {
+					from: 'connections',
+					localField: '_id',
+					foreignField: 'dealId',
+					as: 'connections'
+				}
+			},
+			{
+				$addFields: {
+					connections: {
+						$size: '$connections'
+					}
+				}
+			}
+		]
+
+		const createdBy = [
+			{
+				$lookup: {
+					from: 'users',
+					localField: 'createdBy',
+					foreignField: '_id',
+					as: 'createdBy'
+				}
+			},
+			{
+				$project: {
+					'createdBy.email': 0,
+					'createdBy.password': 0,
+					'createdBy.referralCode': 0,
+					'createdBy.verified': 0,
+					'createdBy.createdAt': 0,
+					'createdBy.updatedAt': 0,
+					'createdBy.phone': 0
+				}
+			},
+			{
+				$unwind: {
+					path: '$createdBy',
+					preserveNullAndEmptyArrays: true
+				}
+			}
+		]
+
+		pipelineArray.push(...connections, ...createdBy)
+
+		return await getMongoRepository(DealEntity)
+			.aggregate(pipelineArray)
+			.toArray()
+	}
 }
