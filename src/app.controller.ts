@@ -32,6 +32,7 @@ import { ErrorResponseDto } from './modules/users/dto/error-response.dto'
 import { UserEntity } from './modules/users/user.entity'
 import { UploadResponseDto } from './modules/users/dto/upload-response.dto'
 import { DealsService } from './modules/deals/deals.service'
+import { DealResponseDto } from './modules/deals/dto/deal-response.dto'
 
 @ApiResponse({
 	status: 401,
@@ -86,8 +87,8 @@ export class AppController {
 
 	@ApiResponse({
 		status: 200,
-		description: 'The found My deal',
-		type: UserEntity
+		description: 'The found records',
+		type: [DealResponseDto]
 	})
 	@ApiBearerAuth()
 	@UseGuards(AuthGuard('jwt'))
