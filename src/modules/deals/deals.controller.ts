@@ -51,7 +51,8 @@ export class DealsController {
 		// description: 'Aaa',
 		// operationId: 'aaaa'
 	})
-	@Get(':searchIn')
+	// @Get(':searchIn')
+	@Get()
 	@ApiImplicitQuery({
 		name: 'limit',
 		description: 'The maximum number of transactions to return',
@@ -92,8 +93,11 @@ export class DealsController {
 		type: DealType,
 		enum: ['Request', 'Offer']
 	})
-	findAll(@Param('searchIn') searchIn: string, @Query() query) {
-		console.log('sdasd', searchIn)
+	findAll(
+		// @Param('searchIn') searchIn: string,
+		@Query() query
+	) {
+		// console.log('sdasd', searchIn)
 		return this.dealsService.findAll(query)
 	}
 
