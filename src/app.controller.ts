@@ -61,7 +61,7 @@ export class AppController {
 	}
 
 	@Post('/req')
-	postHello(@Request() req): string {
+	postHello(@Request() req) {
 		Logger.log(`🤬 ${chalk.hex('#87e8de').bold(`${req.body}`)}`, 'Check')
 		return req.body
 	}

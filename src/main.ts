@@ -64,9 +64,9 @@ async function bootstrap() {
 		NODE_ENV !== 'testing' && app.use(LoggerMiddleware)
 
 		// interceptors
-		app.useGlobalInterceptors(new LoggingInterceptor())
-		app.useGlobalInterceptors(new TimeoutInterceptor())
-		app.useGlobalFilters(new HttpExceptionFilter())
+		// app.useGlobalInterceptors(new LoggingInterceptor())
+		// app.useGlobalInterceptors(new TimeoutInterceptor())
+		// app.useGlobalFilters(new HttpExceptionFilter())
 
 		// global nest setup
 		app.useGlobalPipes(new ValidationPipe())
