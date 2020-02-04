@@ -58,9 +58,10 @@ export class AppController {
 		return this.appService.getHello()
 	}
 
-	@Post('/hello')
-	postHello(): string {
-		return this.appService.getHello()
+	@Post('/req')
+	postHello(@Request() req): string {
+		console.log(req.body)
+		return req.body
 	}
 
 	@ApiResponse({
