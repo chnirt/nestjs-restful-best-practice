@@ -62,10 +62,7 @@ export class AppController {
 
 	@Post('/req')
 	postHello(@Request() req): string {
-		Logger.log(
-			`🚀  Server is listening on port ${chalk.hex('#87e8de').bold(`${req}`)}`,
-			'Bootstrap'
-		)
+		Logger.log(`🤬 ${chalk.hex('#87e8de').bold(`${req}`)}`, 'Check')
 		return req.body
 	}
 
