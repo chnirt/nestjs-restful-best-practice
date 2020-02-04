@@ -13,7 +13,7 @@ import {
 	LoggerMiddleware,
 	TimeoutInterceptor,
 	LoggingInterceptor,
-	HttpExceptionFilter,
+	HttpExceptionFilter
 } from './common'
 import { MyLogger } from './config'
 
@@ -38,14 +38,16 @@ async function bootstrap() {
 		app.use(helmet())
 
 		// body parser
-		app.use(bodyParser.json({ limit: '2mb' }))
-		app.use(
-			bodyParser.urlencoded({
-				limit: '2mb',
-				extended: true,
-				parameterLimit: 2000
-			})
-		)
+		app.use(bodyParser.json())
+		app.use(bodyParser.urlencoded())
+		// app.use(bodyParser.json({ limit: '2mb' }))
+		// app.use(
+		// 	bodyParser.urlencoded({
+		// 		limit: '2mb',
+		// 		extended: true,
+		// 		parameterLimit: 2000
+		// 	})
+		// )
 
 		app.use(
 			rateLimit({
@@ -107,17 +109,17 @@ async function bootstrap() {
 
 		NODE_ENV !== 'production'
 			? Logger.log(
-				`🚀  Server ready at https://${DOMAIN!}:${chalk
-					.hex('#87e8de')
-					.bold(`${PORT!}`)}`,
-				'Bootstrap'
-			)
+					`🚀  Server ready at https://${DOMAIN!}:${chalk
+						.hex('#87e8de')
+						.bold(`${PORT!}`)}`,
+					'Bootstrap'
+			  )
 			: Logger.log(
-				`🚀  Server is listening on port ${chalk
-					.hex('#87e8de')
-					.bold(`${PORT!}`)}`,
-				'Bootstrap'
-			)
+					`🚀  Server is listening on port ${chalk
+						.hex('#87e8de')
+						.bold(`${PORT!}`)}`,
+					'Bootstrap'
+			  )
 	} catch (error) {
 		// logger.error(error)
 		Logger.error(`❌  Error starting server, ${error}`, '', 'Bootstrap', false)

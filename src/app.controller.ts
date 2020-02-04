@@ -10,7 +10,8 @@ import {
 	UploadedFile,
 	CacheInterceptor,
 	Body,
-	Query
+	Query,
+	Logger
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import {
@@ -24,6 +25,7 @@ import {
 	ApiImplicitQuery
 } from '@nestjs/swagger'
 import { FileInterceptor } from '@nestjs/platform-express'
+import chalk from 'chalk'
 import { AppService } from './app.service'
 import { AuthService } from './auth/auth.service'
 import { LoginUserDto } from './modules/users/dto/login-user.dto'
@@ -60,7 +62,10 @@ export class AppController {
 
 	@Post('/req')
 	postHello(@Request() req): string {
-		console.log(req.body)
+		Logger.log(
+			`🚀  Server is listening on port ${chalk.hex('#87e8de').bold(`${req}`)}`,
+			'Bootstrap'
+		)
 		return req.body
 	}
 
