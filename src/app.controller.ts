@@ -58,6 +58,11 @@ export class AppController {
 		return this.appService.getHello()
 	}
 
+	@Post('/hello')
+	postHello(): string {
+		return this.appService.getHello()
+	}
+
 	@ApiResponse({
 		status: 200,
 		description: 'The found record',
